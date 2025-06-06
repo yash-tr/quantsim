@@ -1,0 +1,18 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+include sample_batch_config.yaml
+
+recursive-include quantsim *.py
+recursive-include tests *.py
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+recursive-exclude * Thumbs.db
+
+global-exclude .coverage
+global-exclude .pytest_cache
+global-exclude htmlcov
+global-exclude backtest_results 

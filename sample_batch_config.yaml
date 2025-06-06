@@ -1,0 +1,82 @@
+# QuantSim Batch Configuration Example
+
+# This file defines a list of backtest configurations to be run in batch mode.
+# Each item in the list is a dictionary representing one backtest run.
+# Keys in the dictionary correspond to CLI arguments (use hyphens, not underscores, as in CLI).
+# Example: --yf-start-date becomes yf_start_date in YAML.
+# (Note: The implemented CLI batch runner actually maps YAML keys directly to argparse dest attributes,
+# which typically use underscores. So, YAML keys should use underscores).
+
+# Paths for csv_file_path can be relative to this YAML file's location or absolute.
+# output_dir:
+#   If specified in a run config: Path is used directly (made absolute if relative to CWD).
+#   If omitted in a run config: A subdirectory named after the run's 'name' (or 'BatchRun_X')
+#                               is created under the main --output-dir from CLI
+#                               (which defaults to 'backtest_results/').
+
+- name: "SMA_SPY_CSV_Basic"
+  strategy: "sma_crossover"
+  data_source: "csv"
+  csv_file_path: "data/dummy_ohlcv.csv" # Path relative to this YAML file, or absolute
+  symbol: "SPY_CSV"
+  initial_capital: 100000
+  short_window: 10
+  long_window: 20
+  order_quantity: 50
+  # output_dir: "./custom_batch_outputs/SMA_SPY_Basic_Run" # Example of specific output dir for this run
+
+- name: "Momentum_AAPL_Yahoo_Quick"
+  strategy: "momentum"
+  data_source: "yahoo"
+  yf_symbols: ["AAPL"]
+  yf_start_date: "2023-01-01"
+  yf_end_date: "2023-06-30"
+  yf_interval: "1d"
+  momentum_window: 25
+  order_quantity: 30
+  stop_loss_pct: 0.05
+  atr_period: 14
+  slippage_type: "atr"
+  atr_multiplier: 0.6
+
+- name: "MeanReversion_Synth_HighVol_LMT"
+  strategy: "mean_reversion"
+  data_source: "synthetic"
+  synth_symbols: ["SYNVOL"]
+  synth_start_date: "2023-01-01"
+  synth_end_date: "2023-03-31"
+  synth_initial_price: 150
+  synth_drift: 0.00005
+  synth_volatility: 0.03
+  synth_frequency: "B"
+  synth_seed: 12345
+  mr_sma_window: 15
+  mr_threshold: 0.025
+  order_quantity: 75
+  limit_order_offset_pct: 0.002
+  commission_fixed: 0.75
+
+- name: "SMA_MultiSymbol_Yahoo_MSFT_Primary"
+  strategy: "sma_crossover"
+  data_source: "yahoo"
+  # For SMACrossover, which expects a single primary symbol for its main logic,
+  # yf_symbols can contain more for data availability, but the first one
+  # will be used by SMACrossover for its calculations if it's not multi-symbol aware.
+  # The `symbol` field (if provided for CSV) or first from `yf_symbols`/`synth_symbols`
+  # is used for naming outputs.
+  yf_symbols: ["MSFT", "GOOG"]
+  yf_start_date: "2023-01-01"
+  yf_end_date: "2023-02-01"
+  initial_capital: 50000
+  short_window: 5
+  long_window: 10
+  # Note: SMACrossoverStrategy as implemented primarily uses the *first* symbol
+  # from the `symbols` list for its core logic if its data_handler is a single DataFrame.
+  # If data_handler is a multi-symbol capable DataHandler instance, it could be adapted.
+  # Here, MSFT will be the primary for SMA calculation.
+  # The ReportGenerator will also use 'MSFT' as the symbol for report naming.
+```
+
+Updated the sample YAML with more comments and slight corrections on path handling explanation. The CLI code uses `os.path.abspath` for `output_dir` specified in YAML, so relative paths there would be relative to CWD. For `csv_file_path`, it's resolved relative to the YAML file's directory.
+
+Now, update the README.

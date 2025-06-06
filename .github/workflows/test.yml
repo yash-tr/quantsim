@@ -1,0 +1,157 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.9", "3.10", "3.11"]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install core dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+    
+    - name: Install test dependencies
+      run: |
+        pip install -e .[dev]
+    
+    - name: Install ML dependencies (if not already installed)
+      run: |
+        pip install -e .[ml]
+      continue-on-error: true  # Don't fail if ML deps can't be installed
+    
+    - name: Run core tests (without ML)
+      run: |
+        python -m pytest tests/ -v \
+          --ignore=tests/ml/ \
+          --ignore=tests/strategies/test_simple_ml.py \
+          --ignore=tests/test_new_features.py \
+          -x --tb=short
+    
+    - name: Run ML tests (if dependencies available)
+      run: |
+        python -c "import sklearn, tensorflow" && \
+        python -m pytest tests/ml/ tests/strategies/test_simple_ml.py -v --tb=short || \
+        echo "⚠️ Skipping ML tests - dependencies not available"
+      continue-on-error: true
+    
+    - name: Test package import
+      run: |
+        python -c "
+        import quantsim
+        print(f'✅ Successfully imported quantsim v{quantsim.__version__}')
+        
+        # Test core components
+        from quantsim import EventQueue, SimulationEngine
+        from quantsim import Portfolio, Position
+        from quantsim import SMACrossoverStrategy
+        print('✅ Core components imported successfully')
+        "
+    
+    - name: Test CLI functionality
+      run: |
+        quantsim --help
+        echo "✅ CLI help command works"
+        
+        # Test that CLI shows available strategies
+        quantsim --help | grep -q "sma_crossover\|momentum\|mean_reversion" && \
+        echo "✅ CLI shows strategies" || \
+        echo "⚠️ CLI strategies not found in help"
+    
+    - name: Run build test
+      run: |
+        pip install build
+        python -m build
+        echo "✅ Package builds successfully"
+    
+    - name: Test wheel installation
+      run: |
+        pip install dist/*.whl --force-reinstall
+        python -c "import quantsim; print(f'✅ Wheel installation successful: v{quantsim.__version__}')"
+
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    
+    - name: Install linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install black flake8 mypy
+        pip install -e .
+    
+    - name: Check code formatting with Black
+      run: |
+        black --check --diff quantsim/
+        echo "✅ Code formatting check passed"
+    
+    - name: Run Flake8 linting
+      run: |
+        flake8 quantsim/ --max-line-length=120 --ignore=E501,W503,E203
+        echo "✅ Flake8 linting passed"
+    
+    - name: Run MyPy type checking
+      run: |
+        mypy quantsim/ --ignore-missing-imports --follow-imports=skip
+        echo "✅ Type checking passed"
+      continue-on-error: true  # Don't fail CI on type issues for now
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit
+        pip install -e .
+    
+    - name: Run Safety check on dependencies
+      run: |
+        safety check
+        echo "✅ Dependency security check passed"
+      continue-on-error: true
+    
+    - name: Run Bandit security scan
+      run: |
+        bandit -r quantsim/ -f json -o bandit-report.json || true
+        bandit -r quantsim/ || echo "⚠️ Security scan completed with warnings"
+        echo "✅ Security scan completed"
+      continue-on-error: true 

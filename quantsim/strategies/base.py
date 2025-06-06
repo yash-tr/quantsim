@@ -1,0 +1,183 @@
+"""Defines the abstract base class for all trading strategies.
+
+This module provides `Strategy(ABC)`, which serves as the foundation for
+all strategy implementations within the QuantSim framework. Concrete strategies
+must inherit from this class and implement its abstract methods to define
+their response to market data, signals, and fill events.
+"""
+
+from abc import ABC, abstractmethod
+from typing import List, Optional, Any, Union # Added Union for type hints
+import datetime
+
+from quantsim.core.events import MarketEvent, SignalEvent, FillEvent, OrderEvent
+from quantsim.core.event_queue import EventQueue
+# from quantsim.data.base import DataHandler # For type hinting data_handler if strictly typed
+
+class Strategy(ABC):
+    """Abstract base class for trading strategies.
+
+    All strategies must inherit from this class and implement the `on_market_data`,
+    `on_signal` (if applicable), and `on_fill` methods. The primary role of a
+    strategy is to generate `OrderEvent`s based on market data or other signals.
+
+    Attributes:
+        event_queue (EventQueue): The system's central event queue, used by the
+            strategy to place `OrderEvent`s (or `SignalEvent`s).
+        symbols (List[str]): A list of ticker symbols this strategy instance
+            is configured to operate on.
+        strategy_id (str): A unique identifier for this strategy instance.
+        data_handler (Optional[Any]): A reference to a data handler instance,
+            which can be used by the strategy to access historical data for
+            indicator calculation or other analyses. Typically set in `__init__`.
+    """
+
+    def __init__(self,
+                 event_queue: EventQueue,
+                 symbols: List[str],
+                 strategy_id: Optional[str] = None,
+                 data_handler: Optional[Any] = None, # Can be DataFrame or DataHandler
+                 **kwargs: Any):
+        """Initializes the Strategy.
+
+        Args:
+            event_queue (EventQueue): The system's event queue.
+            symbols (List[str]): A list of symbols this strategy will operate on.
+            strategy_id (Optional[str], optional): A unique ID for this strategy instance.
+                If None, a default ID is generated based on the class name. Defaults to None.
+            data_handler (Optional[Any], optional): A data handler instance providing access
+                to historical data (e.g., a pandas DataFrame or a DataHandler object).
+                Defaults to None.
+            **kwargs (Any): Catches additional parameters. Useful if strategies are
+                instantiated with a common dict of parameters that might not all be
+                used by every strategy.
+        """
+        self.event_queue: EventQueue = event_queue
+        self.symbols: List[str] = symbols
+        self.strategy_id: str = strategy_id if strategy_id is not None else self.__class__.__name__
+        self.data_handler: Optional[Any] = data_handler
+        # self._strategy_kwargs = kwargs # Optionally store unused kwargs if needed later
+
+
+    @abstractmethod
+    def on_market_data(self, event: MarketEvent) -> None:
+        """Handles new market data events.
+
+        This method is called by the simulation engine when a new `MarketEvent`
+        is received for one of the symbols the strategy is subscribed to (or all,
+        depending on engine implementation). Strategies should implement their
+        core logic here to analyze the market data and potentially generate
+        `OrderEvent`s or `SignalEvent`s.
+
+        Args:
+            event (MarketEvent): The market data event, containing OHLCV data,
+                                 symbol, and timestamp.
+
+        Raises:
+            NotImplementedError: If the subclass does not implement this method.
+        """
+        raise NotImplementedError("Should implement on_market_data()")
+
+    @abstractmethod
+    def on_signal(self, event: SignalEvent) -> None:
+        """Handles external signal events.
+
+        This method is called if the strategy is designed to act on `SignalEvent`s
+        that might originate from other strategies (in a meta-strategy setup) or
+        from external systems integrated into the event loop. If a strategy only
+        generates its own signals/orders based on market data, this method might
+        have a `pass` implementation.
+
+        Args:
+            event (SignalEvent): The signal event containing details like symbol,
+                                 direction, strength, and originating strategy ID.
+
+        Raises:
+            NotImplementedError: If the subclass does not implement this method.
+        """
+        raise NotImplementedError("Should implement on_signal()")
+
+    @abstractmethod
+    def on_fill(self, event: FillEvent) -> None:
+        """Handles fill events (order execution confirmations).
+
+        This method is called by the simulation engine when an `OrderEvent`
+        previously generated by this (or another) strategy has been filled (or
+        partially filled). Strategies use this to update their internal state
+        regarding current positions, cash (if tracked locally, though Portfolio
+        is the main source of truth), or any other logic that depends on trade
+        execution confirmation.
+
+        Args:
+            event (FillEvent): The fill event, confirming an order execution and
+                               providing details like fill price, quantity, and commission.
+
+        Raises:
+            NotImplementedError: If the subclass does not implement this method.
+        """
+        raise NotImplementedError("Should implement on_fill()")
+
+    def _generate_signal(self,
+                         symbol: str,
+                         direction: str,
+                         strength: float = 1.0,
+                         timestamp: Optional[datetime.datetime] = None,
+                         strategy_id_override: Optional[str] = None) -> None:
+        """Helper method to create and enqueue a `SignalEvent`.
+
+        Args:
+            symbol (str): The ticker symbol for the signal.
+            direction (str): Direction of the signal ('LONG', 'SHORT', 'EXIT').
+            strength (float, optional): Confidence of the signal. Defaults to 1.0.
+            timestamp (Optional[datetime.datetime], optional): Timestamp for the signal.
+                Defaults to current UTC time if None (handled by Event base class).
+            strategy_id_override (Optional[str], optional): Overrides the strategy's default
+                ID for this specific signal. Defaults to None, using `self.strategy_id`.
+        """
+        sig_id_to_use = strategy_id_override if strategy_id_override is not None else self.strategy_id
+        signal = SignalEvent(
+            symbol=symbol, direction=direction, strength=strength,
+            timestamp=timestamp, strategy_id=sig_id_to_use
+        )
+        self.event_queue.put_event(signal)
+
+    def _generate_order(self,
+                        symbol: str,
+                        order_type: str,
+                        direction: str,
+                        quantity: float,
+                        timestamp: Optional[datetime.datetime] = None,
+                        order_id: Optional[str] = None,
+                        reference_price: Optional[float] = None,
+                        limit_price: Optional[float] = None,
+                        stop_price: Optional[float] = None,
+                        current_atr: Optional[float] = None) -> None:
+        """Helper method to create and enqueue an `OrderEvent`.
+
+        Strategies should use this method to generate orders. It populates all
+        fields of an `OrderEvent` and places it on the event queue for processing
+        by the `ExecutionHandler`.
+
+        Args:
+            symbol (str): The ticker symbol for the order.
+            order_type (str): Type of order (e.g., 'MKT', 'LMT', 'STP').
+            direction (str): Direction of the order ('BUY' or 'SELL').
+            quantity (float): Quantity to trade. Must be positive; the `OrderEvent`
+                              constructor will validate this.
+            timestamp (Optional[datetime.datetime], optional): Timestamp for the order.
+                Defaults to current UTC time if None (handled by Event base class).
+            order_id (Optional[str], optional): A client-side order ID. Defaults to None.
+            reference_price (Optional[float], optional): Reference market price at the time
+                of decision, used by execution handler for slippage or trigger checks.
+                Defaults to None.
+            limit_price (Optional[float], optional): Limit price for 'LMT' orders. Defaults to None.
+            stop_price (Optional[float], optional): Stop price for 'STP' orders. Defaults to None.
+            current_atr (Optional[float], optional): Current ATR value, if available and
+                relevant for ATR-based slippage models. Defaults to None.
+        """
+        order = OrderEvent(
+            symbol=symbol, order_type=order_type, quantity=quantity, direction=direction,
+            timestamp=timestamp, order_id=order_id, reference_price=reference_price,
+            limit_price=limit_price, stop_price=stop_price, current_atr=current_atr
+        )
+        self.event_queue.put_event(order)

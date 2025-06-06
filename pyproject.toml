@@ -1,0 +1,134 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantsim"
+version = "0.1.0"
+description = "An event-driven backtesting and execution simulation engine for quantitative trading strategies."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "Yash Tripathi", email = "tripathiyash1004@gmail.com" }
+]
+maintainers = [
+    { name = "Yash Tripathi", email = "tripathiyash1004@gmail.com" }
+]
+keywords = ["quantitative", "trading", "finance", "backtesting", "event-driven", "algorithmic trading", "simulation", "strategies"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "pandas>=1.3",
+    "numpy>=1.20",
+    "matplotlib>=3.4",
+    "PyYAML>=5.4",
+    "yfinance>=0.2.0",
+    "joblib>=1.1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/yasht1004/quantsim"
+Repository = "https://github.com/yasht1004/quantsim"
+Documentation = "https://quantsim.readthedocs.io/"
+"Bug Tracker" = "https://github.com/yasht1004/quantsim/issues"
+Changelog = "https://github.com/yasht1004/quantsim/blob/main/CHANGELOG.md"
+
+[project.scripts]
+quantsim = "quantsim.cli.main:main_cli_entry"
+
+[project.optional-dependencies]
+ml = [
+    "scikit-learn>=1.0",
+    "tensorflow>=2.8"
+]
+
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=3.0",
+    "pytest-mock>=3.0",
+    "black",
+    "flake8",
+    "mypy",
+    "build",
+    "twine"
+]
+
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinx-autodoc-typehints"
+]
+
+# --- Tool Configurations ---
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = ""
+markers = [
+    "core: tests related to the core event system and engine",
+    "data: tests for data handlers (CSV, Yahoo, Synthetic)",
+    "execution: tests for execution handling, slippage, commission",
+    "portfolio: tests for portfolio management, positions, trade logging, metrics",
+    "strategies: tests for trading strategies (SMA, Momentum, MeanReversion)",
+    "indicators: tests for indicator calculation functions (ATR, SMA)",
+    "cli: tests for command-line interface functionality",
+    "reports: tests for report generation and plotting utilities",
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+minversion = "7.0"
+norecursedirs = [
+    ".git", ".tox", ".venv", "venv", "dist", "build", "*.egg-info",
+    "data", "htmlcov", "backtest_results", "__pycache__", ".pytest_cache"
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
+
+[tool.coverage.run]
+source = ["quantsim"]
+omit = [
+    "quantsim/tests/*",
+    "quantsim/__main__.py",
+    "quantsim/cli/main.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "@(abc\\.)?abstractmethod",
+    "if TYPE_CHECKING:",
+    "pass",
+    "\\.\\.\\.",
+    "except Exception:",
+    "print\\(.*\\)",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# --- Package Discovery ---
+[tool.setuptools.packages.find]
+include = ["quantsim*"]
+exclude = ["tests*", "notebooks*", "htmlcov*", "docs*"] 
