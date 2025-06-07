@@ -392,7 +392,7 @@ class Portfolio:
         metrics = self._cached_metrics
 
         if "error" in metrics:
-            print("Error calculating metrics: {}".format(metrics['error']))
+            print("Error calculating metrics: {}".format(metrics["error"]))
             return
 
         print("\nPerformance Metrics:")
