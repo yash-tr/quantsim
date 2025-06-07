@@ -9,7 +9,7 @@
 
 **QuantSim** is a modern, event-driven backtesting framework for quantitative trading strategies. Built with Python 3.9+, it provides institutional-grade simulation capabilities with a focus on performance, accuracy, and extensibility.
 
-## ✨ **Why QuantSim?**
+## ✨ **Why simQuant?**
 
 - 🏗️ **Event-Driven Architecture**: Realistic simulation that processes market events chronologically
 - 📊 **Multiple Data Sources**: Yahoo Finance, CSV files, synthetic data generation
