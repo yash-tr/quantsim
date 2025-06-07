@@ -5,7 +5,6 @@ designed to read market data for a single symbol from a specified CSV file.
 It also includes a utility function `load_csv_data` for direct DataFrame loading.
 """
 
-import os
 import pandas as pd
 from typing import List, Tuple, Dict, Any, Iterator, Optional, Union  # Added Union
 from .base import DataHandler

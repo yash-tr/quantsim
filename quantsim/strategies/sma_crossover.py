@@ -7,7 +7,6 @@ A SELL signal is generated when the short SMA crosses below the long SMA.
 """
 
 import pandas as pd
-import numpy as np
 from typing import List, Optional, Dict, Any  # For type hints
 
 from quantsim.core.events import (

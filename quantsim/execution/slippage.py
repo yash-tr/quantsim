@@ -7,7 +7,7 @@ reference market price, simulating market impact or adverse price movement.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Optional
 
 # Forward declaration for type hinting
 if "quantsim.core.events" not in __import__("sys").modules:

@@ -5,8 +5,7 @@ and convergence of their price spread.
 """
 
 import pandas as pd
-import numpy as np
-from typing import List, Optional, Dict, Any
+from typing import List, Any
 
 try:
     from statsmodels.tsa.stattools import coint
@@ -16,7 +15,7 @@ except ImportError:
     HAS_STATSMODELS = False
     coint = None
 
-from quantsim.core.events import MarketEvent, FillEvent, OrderEvent, SignalEvent
+from quantsim.core.events import MarketEvent, FillEvent, OrderEvent
 from quantsim.core.event_queue import EventQueue
 from quantsim.strategies.base import Strategy
 

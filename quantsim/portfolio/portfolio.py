@@ -222,7 +222,6 @@ class Portfolio:
                 daily_risk_free_rate = (1 + risk_free_rate) ** (1 / 252) - 1
 
                 # Annualized metrics (252 trading days per year)
-                annualized_return = (1 + mean_daily_return) ** 252 - 1
                 annualized_volatility = daily_volatility * (252**0.5)
 
                 # Sharpe ratio using daily calculation then annualized
@@ -251,7 +250,6 @@ class Portfolio:
                         1.0 / time_delta_years
                     ) - 1
             else:
-                annualized_return = 0
                 annualized_volatility = 0
                 sharpe_ratio = (
                     float("nan") if len(returns) > 0 and returns.std() == 0 else 0
@@ -394,14 +392,14 @@ class Portfolio:
         metrics = self._cached_metrics
 
         if "error" in metrics:
-            print(f"Error calculating metrics: {metrics['error']}")
+            print("Error calculating metrics: {}".format(metrics['error']))
             return
 
         print("\nPerformance Metrics:")
         for key, value in metrics.items():
             if key != "error":
                 formatted_key = key.replace("_pct", " (%)").replace("_", " ").title()
-                print(f"{formatted_key}: {value}")
+                print("{}: {}".format(formatted_key, value))
 
     def export_trade_log(
         self, filepath: str, include_open_trades: bool = False
@@ -421,7 +419,7 @@ class Portfolio:
         )
 
         if self.positions:
-            print(f"\nOpen Positions:")
+            print("\nOpen Positions:")
             for symbol, position in self.positions.items():
                 print(
                     f"  {symbol}: {position.quantity:.2f} shares @ ${position.last_price:.2f} (Unrealized P&L: ${position.unrealized_pnl:.2f})"
@@ -429,6 +427,6 @@ class Portfolio:
 
         completed_trades = self.trade_logger.get_completed_trades()
         if completed_trades:
-            print(f"\nCompleted Trades: {len(completed_trades)}")
+            print(f"Completed Trades: {len(completed_trades)}")
             total_pnl = sum(trade.net_pnl for trade in completed_trades)
             print(f"Total Realized P&L: ${total_pnl:.2f}")

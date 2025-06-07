@@ -3,7 +3,6 @@ Orchestrates the training of machine learning models for use in trading strategi
 """
 
 import pandas as pd
-import numpy as np
 import joblib
 import os
 
@@ -20,7 +19,6 @@ except ImportError:
     SKLEARN_AVAILABLE = False
 
 try:
-    import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense, Dropout
 

@@ -3,9 +3,9 @@ Base class for machine learning-based trading strategies.
 """
 
 from quantsim.strategies.base import Strategy
-from quantsim.core.events import SignalEvent, MarketEvent, FillEvent
+from quantsim.core.events import MarketEvent
 from quantsim.core.event_queue import EventQueue
-from typing import List, Any, Optional
+from typing import List, Any
 import pandas as pd
 import numpy as np
 

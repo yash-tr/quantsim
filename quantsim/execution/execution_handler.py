@@ -11,9 +11,9 @@ import datetime
 from abc import ABC, abstractmethod
 from typing import Optional, Any
 
-from quantsim.core.events import OrderEvent, FillEvent
+from quantsim.core.events import OrderEvent, FillEvent, MarketEvent
 from quantsim.core.event_queue import EventQueue
-from .slippage import SlippageModel, PercentageSlippage, ATRSlippage
+from .slippage import SlippageModel, PercentageSlippage
 
 # TODO: Consider moving CommissionModel and its implementations to a separate commission.py
 

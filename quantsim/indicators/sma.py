@@ -1,12 +1,11 @@
-"""Provides a function to calculate Simple Moving Average (SMA).
+"""
+Simple Moving Average (SMA) calculation functions.
 
-The Simple Moving Average is a common technical indicator used to smooth out
-price data by calculating the average price over a specified number of periods.
-This module contains the `calculate_sma` utility function.
+This module provides the implementation for calculating Simple Moving Averages
+on time series data, specifically stock price data.
 """
 
 import pandas as pd
-import numpy as np
 
 
 def calculate_sma(prices: pd.Series, period: int) -> pd.Series:

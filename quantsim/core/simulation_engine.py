@@ -2,11 +2,10 @@
 Core simulation engine that orchestrates the backtesting process.
 """
 
-import time
-from typing import Optional, Any, TYPE_CHECKING, Dict, Callable
+from typing import Any, TYPE_CHECKING, Dict, Callable
 
 from .event_queue import EventQueue
-from .events import MarketEvent, OrderEvent, FillEvent, Event, SignalEvent
+from .events import MarketEvent, OrderEvent, FillEvent, SignalEvent
 from quantsim.data.base import DataHandler
 from quantsim.strategies.base import Strategy
 from quantsim.execution.execution_handler import ExecutionHandler

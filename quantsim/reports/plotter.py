@@ -4,12 +4,12 @@ Provides plotting functionalities for backtest reports.
 
 import pandas as pd
 import matplotlib
-
-matplotlib.use("Agg")  # Use non-interactive backend for saving files
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import os
-from typing import Union, Optional
+from typing import Optional
+
+matplotlib.use("Agg")  # Use non-interactive backend for saving files
 
 
 def plot_equity_curve(
@@ -113,9 +113,6 @@ def plot_drawdown_series(
     plt.ylabel("Drawdown (%)")
 
     # Format Y-axis as percentage
-    formatter = mticker.PercentFormatter(
-        xmax=1.0, decimals=0
-    )  # xmax=1.0 if input is 0 to -1, or 100.0 if input is 0 to -100
     plt.gca().yaxis.set_major_formatter(mticker.FuncFormatter(lambda y, _: f"{y:.0f}%"))
 
     plt.xticks(rotation=45)

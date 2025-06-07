@@ -7,7 +7,7 @@ their response to market data, signals, and fill events.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Any, Union  # Added Union for type hints
+from typing import List, Optional, Any
 import datetime
 
 from quantsim.core.events import MarketEvent, SignalEvent, FillEvent, OrderEvent

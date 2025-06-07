@@ -6,8 +6,6 @@ from quantsim.ml.base_ml_strategy import BaseMLStrategy
 from quantsim.core.events import MarketEvent, OrderEvent
 from quantsim.ml.feature_generator import FeatureGenerator
 from typing import Any
-import pandas as pd
-import numpy as np
 
 
 class SimpleMLStrategy(BaseMLStrategy):
