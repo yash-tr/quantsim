@@ -7,11 +7,12 @@ matplotlib.use('Agg') # Use non-interactive backend for saving files
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import os
+from typing import Union, Optional
 
 def plot_equity_curve(equity_curve_df: pd.DataFrame,
                       output_path: str,
                       title: str = "Portfolio Equity Curve",
-                      initial_capital: float | None = None):
+                      initial_capital: Optional[float] = None):
     """
     Generates and saves a plot of the equity curve.
 

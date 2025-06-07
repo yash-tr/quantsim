@@ -22,7 +22,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     
@@ -41,18 +41,11 @@ jobs:
       continue-on-error: true  # Don't fail if ML deps can't be installed
     
     - name: Run core tests (without ML)
-      run: |
-        python -m pytest tests/ -v \
-          --ignore=tests/ml/ \
-          --ignore=tests/strategies/test_simple_ml.py \
-          --ignore=tests/test_new_features.py \
-          -x --tb=short
+      run: python -m pytest tests/ -v --ignore=tests/ml/ --ignore=tests/strategies/test_simple_ml.py --ignore=tests/test_new_features.py -x --tb=short
     
     - name: Run ML tests (if dependencies available)
       run: |
-        python -c "import sklearn, tensorflow" && \
-        python -m pytest tests/ml/ tests/strategies/test_simple_ml.py -v --tb=short || \
-        echo "⚠️ Skipping ML tests - dependencies not available"
+        python -c "import sklearn, tensorflow" && python -m pytest tests/ml/ tests/strategies/test_simple_ml.py -v --tb=short || echo "⚠️ Skipping ML tests - dependencies not available"
       continue-on-error: true
     
     - name: Test package import
@@ -74,9 +67,7 @@ jobs:
         echo "✅ CLI help command works"
         
         # Test that CLI shows available strategies
-        quantsim --help | grep -q "sma_crossover\|momentum\|mean_reversion" && \
-        echo "✅ CLI shows strategies" || \
-        echo "⚠️ CLI strategies not found in help"
+        quantsim --help | grep -q "sma_crossover\|momentum\|mean_reversion" && echo "✅ CLI shows strategies" || echo "⚠️ CLI strategies not found in help"
     
     - name: Run build test
       run: |
@@ -98,7 +89,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
     
@@ -133,7 +124,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
     
