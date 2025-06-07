@@ -1,4 +1,4 @@
-# 🚀 QuantSim: Professional Event-Driven Backtesting Framework
+# 🚀 Simquant: Professional Event-Driven Backtesting Framework
 
 [![Tests](https://github.com/yash-tr/quantsim/workflows/Test%20Suite/badge.svg)](https://github.com/yash-tr/quantsim/actions)
 [![PyPI](https://img.shields.io/pypi/v/quantsim.svg)](https://pypi.org/project/quantsim/)
@@ -368,7 +368,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Ready to transform your trading strategies? Install QuantSim today and start building professional backtests in minutes!**
 
 ```bash
-pip install quantsim
+pip install simquant
 ```
 
 ⭐ **Star us on GitHub if QuantSim helps your trading!** ⭐
