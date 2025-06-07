@@ -1,4 +1,4 @@
-# QuantSim Documentation
+# simQuant Documentation
 
 <div align="center">
     <img src="assets/favicon_icon.png" alt="QuantSim Logo" width="200"/>
@@ -14,9 +14,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yash-tr/quantsim/blob/main/LICENSE)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](https://github.com/yash-tr/quantsim/actions)
 
-## What is QuantSim?
+## What is simQuant?
 
-**QuantSim** is a cutting-edge, event-driven backtesting framework designed for quantitative traders, researchers, and financial institutions. It provides institutional-grade simulation capabilities with a focus on **performance**, **accuracy**, and **extensibility**.
+**simQuant** is a cutting-edge, event-driven backtesting framework designed for quantitative traders, researchers, and financial institutions. It provides institutional-grade simulation capabilities with a focus on **performance**, **accuracy**, and **extensibility**.
 
 !!! tip "Why Choose QuantSim?"
     - 🏗️ **Event-Driven Architecture** - Realistic simulation processing market events chronologically
@@ -27,7 +27,7 @@
 
 ## Quick Start
 
-Get up and running with QuantSim in under 5 minutes:
+Get up and running with simQuant in under 5 minutes:
 
 ### Installation
 
@@ -176,7 +176,7 @@ QuantSim calculates comprehensive performance metrics to evaluate your strategie
 
 Ready to start building your trading strategies? Here are some suggested next steps:
 
-1. **[Install QuantSim](getting-started/installation.md)** - Get QuantSim installed on your system
+1. **[Install simQuant](getting-started/installation.md)** - Get QuantSim installed on your system
 2. **[Quick Start Guide](getting-started/quickstart.md)** - Build your first strategy in minutes  
 3. **[SMA Crossover Example](examples/sma-crossover.md)** - Explore a real strategy example
 4. **[Contributing Guide](development/contributing.md)** - Help improve QuantSim
