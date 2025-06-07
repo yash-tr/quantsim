@@ -1,15 +1,15 @@
-# 🚀 QuantSim: Professional Event-Driven Backtesting Framework
+# 🚀 simQuant: Professional Event-Driven Backtesting Framework
 
 [![Tests](https://github.com/yash-tr/quantsim/workflows/Test%20Suite/badge.svg)](https://github.com/yash-tr/quantsim/actions)
-[![PyPI](https://img.shields.io/pypi/v/quantsim.svg)](https://pypi.org/project/quantsim/)
-[![Python](https://img.shields.io/pypi/pyversions/quantsim.svg)](https://pypi.org/project/quantsim/)
+[![PyPI](https://img.shields.io/pypi/v/simQuant.svg)](https://pypi.org/project/simQuant/)
+[![Python](https://img.shields.io/pypi/pyversions/simQuant.svg)](https://pypi.org/project/simQuant/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://yash-tr.github.io/quantsim/)
 
-**QuantSim** is a modern, event-driven backtesting framework for quantitative trading strategies. Built with Python 3.9+, it provides institutional-grade simulation capabilities with a focus on performance, accuracy, and extensibility.
+**simQuant** is a modern, event-driven backtesting framework for quantitative trading strategies. Built with Python 3.9+, it provides institutional-grade simulation capabilities with a focus on performance, accuracy, and extensibility.
 
-## ✨ **Why QuantSim?**
+## ✨ **Why simQuant?**
 
 - 🏗️ **Event-Driven Architecture**: Realistic simulation that processes market events chronologically
 - 📊 **Multiple Data Sources**: Yahoo Finance, CSV files, synthetic data generation
@@ -27,16 +27,16 @@
 ### From PyPI (Recommended)
 ```bash
 # Core package
-pip install quantsim
+pip install simQuant
 
 # With ML capabilities
-pip install quantsim[ml]
+pip install simQuant[ml]
 
 # With pairs trading (requires statsmodels)
-pip install quantsim[pairs]
+pip install simQuant[pairs]
 
 # Full installation with all features
-pip install quantsim[ml,pairs]
+pip install simQuant[ml,pairs]
 ```
 
 ### For Development
@@ -72,13 +72,13 @@ print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 ### 2. Command Line Interface
 ```bash
 # Run a single backtest
-quantsim run --strategy sma_crossover --symbol AAPL --start 2022-01-01 --end 2023-01-01
+simquant run --strategy sma_crossover --symbol AAPL --start 2022-01-01 --end 2023-01-01
 
 # Batch backtesting from YAML config
-quantsim batch my_strategies.yaml
+simquant batch my_strategies.yaml
 
 # Get help
-quantsim --help
+simquant --help
 ```
 
 ### 3. Custom Strategy Development
@@ -138,7 +138,7 @@ class MyStrategy(Strategy):
 
 ## 📊 **Performance Metrics**
 
-QuantSim calculates comprehensive performance metrics:
+simQuant calculates comprehensive performance metrics:
 
 | Metric | Description |
 |--------|-------------|
@@ -205,7 +205,7 @@ strategy = MLStrategy(
 
 ## 🧪 **Testing & Quality**
 
-QuantSim maintains high code quality standards:
+simQuant maintains high code quality standards:
 
 - **178 Unit Tests** with 95%+ coverage
 - **Multi-platform Testing** (Ubuntu, Windows, macOS)
@@ -254,10 +254,10 @@ strategies:
 ### Batch Processing
 ```bash
 # Run multiple strategies from YAML config
-quantsim batch strategies.yaml --output-dir results/
+simquant batch strategies.yaml --output-dir results/
 
 # Parallel execution
-quantsim batch strategies.yaml --parallel --workers 4
+simquant batch strategies.yaml --parallel --workers 4
 ```
 
 ### Custom Indicators
@@ -288,7 +288,7 @@ risk_manager = RiskManager(
 
 ## 🌟 **Competitive Advantages**
 
-| Feature | QuantSim | Zipline | Backtrader | FreqTrade |
+| Feature | simQuant | Zipline | Backtrader | FreqTrade |
 |---------|----------|---------|------------|-----------|
 | **Modern Python** | ✅ 3.9+ | ❌ 3.6+ | ✅ 3.7+ | ✅ 3.8+ |
 | **Event-Driven** | ✅ | ✅ | ❌ | ✅ |
@@ -365,10 +365,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Ready to transform your trading strategies? Install QuantSim today and start building professional backtests in minutes!**
+**Ready to transform your trading strategies? Install simQuant today and start building professional backtests in minutes!**
 
 ```bash
-pip install quantsim
+pip install simQuant
 ```
 
-⭐ **Star us on GitHub if QuantSim helps your trading!** ⭐
+⭐ **Star us on GitHub if simQuant helps your trading!** ⭐
