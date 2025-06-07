@@ -110,7 +110,7 @@ jobs:
         run: |
           echo "📚 Building documentation for PR validation..."
           mkdocs build --clean --strict
-          echo "✅ Documentation build successful!"
+          echo "SUCCESS: Documentation build successful!"
           
           # List generated files
           echo "📁 Generated documentation structure:"

@@ -45,40 +45,40 @@ jobs:
     
     - name: Run ML tests (if dependencies available)
       run: |
-        python -c "import sklearn, tensorflow" && python -m pytest tests/ml/ tests/strategies/test_simple_ml.py -v --tb=short || echo "⚠️ Skipping ML tests - dependencies not available"
+        python -c "import sklearn, tensorflow" && python -m pytest tests/ml/ tests/strategies/test_simple_ml.py -v --tb=short || echo "WARNING: Skipping ML tests - dependencies not available"
       continue-on-error: true
     
     - name: Test package import
       run: |
         python -c "
         import quantsim
-        print(f'✅ Successfully imported quantsim v{quantsim.__version__}')
+        print(f'SUCCESS: Successfully imported quantsim v{quantsim.__version__}')
         
         # Test core components
         from quantsim import EventQueue, SimulationEngine
         from quantsim import Portfolio, Position
         from quantsim import SMACrossoverStrategy
-        print('✅ Core components imported successfully')
+        print('SUCCESS: Core components imported successfully')
         "
     
     - name: Test CLI functionality
       run: |
         quantsim --help
-        echo "✅ CLI help command works"
+        echo "SUCCESS: CLI help command works"
         
         # Test that CLI shows available strategies
-        quantsim --help | grep -q "sma_crossover\|momentum\|mean_reversion" && echo "✅ CLI shows strategies" || echo "⚠️ CLI strategies not found in help"
+        quantsim --help | grep -q "sma_crossover\|momentum\|mean_reversion" && echo "SUCCESS: CLI shows strategies" || echo "WARNING: CLI strategies not found in help"
     
     - name: Run build test
       run: |
         pip install build
         python -m build
-        echo "✅ Package builds successfully"
+        echo "SUCCESS: Package builds successfully"
     
     - name: Test wheel installation
       run: |
         pip install dist/*.whl --force-reinstall
-        python -c "import quantsim; print(f'✅ Wheel installation successful: v{quantsim.__version__}')"
+        python -c "import quantsim; print(f'SUCCESS: Wheel installation successful: v{quantsim.__version__}')"
 
   lint:
     name: Code Quality Checks
@@ -102,17 +102,17 @@ jobs:
     - name: Check code formatting with Black
       run: |
         black --check --diff quantsim/
-        echo "✅ Code formatting check passed"
+        echo "SUCCESS: Code formatting check passed"
     
     - name: Run Flake8 linting
       run: |
         flake8 quantsim/ --max-line-length=120 --ignore=E501,W503,E203
-        echo "✅ Flake8 linting passed"
+        echo "SUCCESS: Flake8 linting passed"
     
     - name: Run MyPy type checking
       run: |
         mypy quantsim/ --ignore-missing-imports --follow-imports=skip
-        echo "✅ Type checking passed"
+        echo "SUCCESS: Type checking passed"
       continue-on-error: true  # Don't fail CI on type issues for now
 
   security:
@@ -137,12 +137,12 @@ jobs:
     - name: Run Safety check on dependencies
       run: |
         safety check
-        echo "✅ Dependency security check passed"
+        echo "SUCCESS: Dependency security check passed"
       continue-on-error: true
     
     - name: Run Bandit security scan
       run: |
         bandit -r quantsim/ -f json -o bandit-report.json || true
-        bandit -r quantsim/ || echo "⚠️ Security scan completed with warnings"
-        echo "✅ Security scan completed"
+        bandit -r quantsim/ || echo "WARNING: Security scan completed with warnings"
+        echo "SUCCESS: Security scan completed"
       continue-on-error: true 

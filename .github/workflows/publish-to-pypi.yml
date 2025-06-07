@@ -47,13 +47,13 @@ jobs:
           echo "Please update the version in quantsim/__init__.py and pyproject.toml"
           exit 1
         fi
-        echo "✅ Version check passed"
+        echo "SUCCESS: Version check passed"
     
     - name: Build package
       run: |
-        echo "🔨 Building package..."
+        echo "Building package..."
         python -m build
-        echo "📦 Build complete!"
+        echo "Build complete!"
         
         # List built files
         echo "Built files:"
@@ -61,18 +61,18 @@ jobs:
     
     - name: Verify package contents
       run: |
-        echo "🔍 Verifying package contents..."
+        echo "Verifying package contents..."
         python -m twine check dist/*
-        echo "✅ Package verification passed!"
+        echo "SUCCESS: Package verification passed!"
     
     - name: Test package installation
       run: |
-        echo "🧪 Testing package installation..."
+        echo "Testing package installation..."
         pip install dist/*.whl
-        python -c "import quantsim; print(f'✅ Successfully imported quantsim v{quantsim.__version__}')"
+        python -c "import quantsim; print(f'SUCCESS: Successfully imported quantsim v{quantsim.__version__}')"
         
         # Test CLI is available
-        quantsim --help > /dev/null && echo "✅ CLI command is available" || echo "⚠️ CLI command not found"
+        quantsim --help > /dev/null && echo "SUCCESS: CLI command is available" || echo "WARNING: CLI command not found"
     
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -83,18 +83,18 @@ jobs:
     - name: Create GitHub Release Summary
       if: github.event_name == 'release'
       run: |
-        echo "## 🚀 PyPI Publication Summary" >> $GITHUB_STEP_SUMMARY
+        echo "## PyPI Publication Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Package:** quantsim" >> $GITHUB_STEP_SUMMARY
         echo "**Version:** $(python -c 'import quantsim; print(quantsim.__version__)')" >> $GITHUB_STEP_SUMMARY
         echo "**Release:** ${GITHUB_REF#refs/tags/}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 📦 Installation" >> $GITHUB_STEP_SUMMARY
+        echo "### Installation" >> $GITHUB_STEP_SUMMARY
         echo '```bash' >> $GITHUB_STEP_SUMMARY
         echo "pip install quantsim" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+        echo "### Links" >> $GITHUB_STEP_SUMMARY
         echo "- [PyPI Package](https://pypi.org/project/quantsim/)" >> $GITHUB_STEP_SUMMARY
         echo "- [Documentation](https://quantsim.readthedocs.io/)" >> $GITHUB_STEP_SUMMARY
         echo "- [GitHub Repository](https://github.com/yash-tr/quantsim)" >> $GITHUB_STEP_SUMMARY 
