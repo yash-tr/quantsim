@@ -409,7 +409,7 @@ class Portfolio:
 
     def print_final_summary(self) -> None:
         """Print a final summary of the portfolio performance."""
-        print(f"\n=== Final Portfolio Summary ===")
+        print("\n=== Final Portfolio Summary ===")
         print(f"Initial Cash: ${self.initial_cash:,.2f}")
         print(f"Final Cash: ${self.cash:,.2f}")
         print(f"Total Portfolio Value: ${self.current_total_value:,.2f}")
