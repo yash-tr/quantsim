@@ -17,6 +17,7 @@ from .slippage import SlippageModel, PercentageSlippage, ATRSlippage
 
 # TODO: Consider moving CommissionModel and its implementations to a separate commission.py
 
+
 class CommissionModel(ABC):
     """Abstract base class for all commission models.
 
@@ -33,6 +34,7 @@ class CommissionModel(ABC):
     4. The method should return the calculated commission amount (float), which is
        always a positive value representing the cost.
     """
+
     @abstractmethod
     def calculate_commission(self, quantity: float, fill_price: float) -> float:
         """Calculates the commission for a trade.
@@ -49,6 +51,7 @@ class CommissionModel(ABC):
         """
         raise NotImplementedError("Should implement calculate_commission()")
 
+
 class FixedCommission(CommissionModel):
     """A simple commission model that charges a fixed amount per trade.
 
@@ -56,6 +59,7 @@ class FixedCommission(CommissionModel):
         commission_per_trade (float): The fixed commission amount for each trade.
                                      Must be non-negative.
     """
+
     def __init__(self, commission_per_trade: float = 1.0):
         """Initializes the FixedCommission model.
 
@@ -82,6 +86,7 @@ class FixedCommission(CommissionModel):
         """
         return self.commission_per_trade
 
+
 class PerShareCommission(CommissionModel):
     """A commission model that charges a fixed amount per share/contract traded.
 
@@ -93,7 +98,10 @@ class PerShareCommission(CommissionModel):
         min_commission (float): The minimum commission amount per trade.
                                Must be non-negative.
     """
-    def __init__(self, commission_per_share: float = 0.005, min_commission: float = 1.0):
+
+    def __init__(
+        self, commission_per_share: float = 0.005, min_commission: float = 1.0
+    ):
         """Initializes the PerShareCommission model.
 
         Args:
@@ -106,7 +114,7 @@ class PerShareCommission(CommissionModel):
         if commission_per_share < 0:
             raise ValueError("Commission per share cannot be negative.")
         if min_commission < 0:
-             raise ValueError("Minimum commission cannot be negative.")
+            raise ValueError("Minimum commission cannot be negative.")
         self.commission_per_share: float = commission_per_share
         self.min_commission: float = min_commission
 
@@ -123,6 +131,7 @@ class PerShareCommission(CommissionModel):
         commission = abs(quantity) * self.commission_per_share
         return max(commission, self.min_commission)
 
+
 class ExecutionHandler(ABC):
     """Abstract base class for all execution handlers.
 
@@ -133,6 +142,7 @@ class ExecutionHandler(ABC):
     Attributes:
         event_queue (EventQueue): The central event queue for the system.
     """
+
     def __init__(self, event_queue: EventQueue):
         """Initializes the ExecutionHandler.
 
@@ -177,15 +187,18 @@ class SimulatedExecutionHandler(ExecutionHandler):
         market_data_provider (Optional[Any]): Optional provider for live market prices
             (not fully implemented for use in this version, relies on OrderEvent.reference_price).
     """
-    def __init__(self,
-                 event_queue: EventQueue,
-                 slippage_model: Optional[SlippageModel] = None,
-                 commission_model: Optional[CommissionModel] = None,
-                 latency_ms: int = 0,
-                 max_fill_pct_per_bar: float = 1.0,
-                 max_fill_qty_per_bar: float = float('inf'),
-                 volume_limit_pct_per_bar: float = 1.0,
-                 market_data_provider: Optional[Any] = None):
+
+    def __init__(
+        self,
+        event_queue: EventQueue,
+        slippage_model: Optional[SlippageModel] = None,
+        commission_model: Optional[CommissionModel] = None,
+        latency_ms: int = 0,
+        max_fill_pct_per_bar: float = 1.0,
+        max_fill_qty_per_bar: float = float("inf"),
+        volume_limit_pct_per_bar: float = 1.0,
+        market_data_provider: Optional[Any] = None,
+    ):
         """Initializes the SimulatedExecutionHandler.
 
         Args:
@@ -208,9 +221,15 @@ class SimulatedExecutionHandler(ExecutionHandler):
             ValueError: If `max_fill_pct_per_bar`, `max_fill_qty_per_bar`, or `volume_limit_pct_per_bar` are invalid.
         """
         super().__init__(event_queue)
-        self.slippage_model: SlippageModel = slippage_model if slippage_model is not None else PercentageSlippage()
-        self.commission_model: CommissionModel = commission_model if commission_model is not None else FixedCommission()
-        self.latency_duration: datetime.timedelta = datetime.timedelta(milliseconds=latency_ms)
+        self.slippage_model: SlippageModel = (
+            slippage_model if slippage_model is not None else PercentageSlippage()
+        )
+        self.commission_model: CommissionModel = (
+            commission_model if commission_model is not None else FixedCommission()
+        )
+        self.latency_duration: datetime.timedelta = datetime.timedelta(
+            milliseconds=latency_ms
+        )
 
         if not (0.0 <= max_fill_pct_per_bar <= 1.0):
             raise ValueError("max_fill_pct_per_bar must be between 0.0 and 1.0.")
@@ -226,13 +245,24 @@ class SimulatedExecutionHandler(ExecutionHandler):
         self.market_data_provider: Optional[Any] = market_data_provider
 
         init_messages = []
-        if latency_ms > 0: init_messages.append(f"latency: {latency_ms}ms")
-        if max_fill_pct_per_bar < 1.0: init_messages.append(f"max_fill_pct: {max_fill_pct_per_bar*100:.1f}%")
-        if max_fill_qty_per_bar != float('inf'): init_messages.append(f"max_fill_qty: {max_fill_qty_per_bar}")
-        if volume_limit_pct_per_bar < 1.0: init_messages.append(f"volume_limit_pct: {volume_limit_pct_per_bar*100:.1f}%")
-        if init_messages: print(f"SimulatedExecutionHandler initialized with ({', '.join(init_messages)}).")
+        if latency_ms > 0:
+            init_messages.append(f"latency: {latency_ms}ms")
+        if max_fill_pct_per_bar < 1.0:
+            init_messages.append(f"max_fill_pct: {max_fill_pct_per_bar*100:.1f}%")
+        if max_fill_qty_per_bar != float("inf"):
+            init_messages.append(f"max_fill_qty: {max_fill_qty_per_bar}")
+        if volume_limit_pct_per_bar < 1.0:
+            init_messages.append(
+                f"volume_limit_pct: {volume_limit_pct_per_bar*100:.1f}%"
+            )
+        if init_messages:
+            print(
+                f"SimulatedExecutionHandler initialized with ({', '.join(init_messages)})."
+            )
 
-    def execute_order(self, event: OrderEvent, market_event: Optional['MarketEvent'] = None) -> None:
+    def execute_order(
+        self, event: OrderEvent, market_event: Optional["MarketEvent"] = None
+    ) -> None:
         """Simulates executing an order, potentially creating a FillEvent.
         Handles Market, Limit, and Stop orders. Applies configured slippage,
         commission, latency, and partial fill logic. Limit and Stop orders are
@@ -242,42 +272,55 @@ class SimulatedExecutionHandler(ExecutionHandler):
             market_event (Optional[MarketEvent]): The market event that triggered this execution.
                                                   Used for accessing bid/ask prices.
         """
-        if event.type != 'ORDER': 
+        if event.type != "ORDER":
             return
         if not market_event:
             return
 
         if event.symbol != market_event.symbol:
             return
-        
+
         requested_quantity = event.quantity
         fill_price = 0.0
         order_triggers = False
 
         # For market orders, the execution price is based on the bid/ask spread
-        if event.order_type == 'MKT':
+        if event.order_type == "MKT":
             order_triggers = True
-            fill_price = market_event.ask_price if event.direction == 'BUY' else market_event.bid_price
-        
+            fill_price = (
+                market_event.ask_price
+                if event.direction == "BUY"
+                else market_event.bid_price
+            )
+
         # For limit orders
-        elif event.order_type == 'LMT':
-            if hasattr(event, 'limit_price') and event.limit_price is not None:
-                if event.direction == 'BUY' and market_event.close <= event.limit_price:
+        elif event.order_type == "LMT":
+            if hasattr(event, "limit_price") and event.limit_price is not None:
+                if event.direction == "BUY" and market_event.close <= event.limit_price:
                     order_triggers = True
                     fill_price = min(event.limit_price, market_event.ask_price)
-                elif event.direction == 'SELL' and market_event.close >= event.limit_price:
+                elif (
+                    event.direction == "SELL"
+                    and market_event.close >= event.limit_price
+                ):
                     order_triggers = True
                     fill_price = max(event.limit_price, market_event.bid_price)
-        
+
         # For stop orders
-        elif event.order_type == 'STP':
-            if hasattr(event, 'stop_price') and event.stop_price is not None:
-                if event.direction == 'BUY' and market_event.close >= event.stop_price:
+        elif event.order_type == "STP":
+            if hasattr(event, "stop_price") and event.stop_price is not None:
+                if event.direction == "BUY" and market_event.close >= event.stop_price:
                     order_triggers = True
-                    fill_price = market_event.ask_price # Triggered, becomes a market order
-                elif event.direction == 'SELL' and market_event.close <= event.stop_price:
+                    fill_price = (
+                        market_event.ask_price
+                    )  # Triggered, becomes a market order
+                elif (
+                    event.direction == "SELL" and market_event.close <= event.stop_price
+                ):
                     order_triggers = True
-                    fill_price = market_event.bid_price # Triggered, becomes a market order
+                    fill_price = (
+                        market_event.bid_price
+                    )  # Triggered, becomes a market order
 
         if not order_triggers:
             return  # Order did not meet conditions to execute on this bar
@@ -291,11 +334,17 @@ class SimulatedExecutionHandler(ExecutionHandler):
         # --- Partial Fill Logic ---
         fillable_by_pct = round(requested_quantity * self.max_fill_pct_per_bar)
         fillable_by_qty = self.max_fill_qty_per_bar
-        
-        market_volume = market_event.volume if market_event else 0
-        fillable_by_volume = round(market_volume * self.volume_limit_pct_per_bar) if market_volume > 0 else float('inf')
 
-        actual_fill_quantity = min(requested_quantity, fillable_by_pct, fillable_by_qty, fillable_by_volume)
+        market_volume = market_event.volume if market_event else 0
+        fillable_by_volume = (
+            round(market_volume * self.volume_limit_pct_per_bar)
+            if market_volume > 0
+            else float("inf")
+        )
+
+        actual_fill_quantity = min(
+            requested_quantity, fillable_by_pct, fillable_by_qty, fillable_by_volume
+        )
 
         if actual_fill_quantity <= 1e-9:
             return
@@ -317,16 +366,23 @@ class SimulatedExecutionHandler(ExecutionHandler):
             commission=commission,
             exchange="SIMULATED",
             timestamp=fill_event_timestamp,
-            order_id=event.order_id
+            order_id=event.order_id,
         )
         self.event_queue.put_event(fill_event)
 
         remaining_quantity = requested_quantity - actual_fill_quantity
         if remaining_quantity > 1e-9:
-            print(f"SimulatedExecutionHandler: Order {event.order_id} for {event.symbol} partially filled. "
-                  f"Filled: {actual_fill_quantity}, Remainder: {remaining_quantity} (Note: Remainder is currently ignored).")
+            print(
+                f"SimulatedExecutionHandler: Order {event.order_id} for {event.symbol} partially filled. "
+                f"Filled: {actual_fill_quantity}, Remainder: {remaining_quantity} (Note: Remainder is currently ignored)."
+            )
 
-    def _calculate_slippage(self, order_event: OrderEvent, market_price: float, market_event: Optional['MarketEvent'] = None) -> float:
+    def _calculate_slippage(
+        self,
+        order_event: OrderEvent,
+        market_price: float,
+        market_event: Optional["MarketEvent"] = None,
+    ) -> float:
         """Applies the configured slippage model to the market price.
         Args:
             order_event (OrderEvent): The original order event.
@@ -336,7 +392,9 @@ class SimulatedExecutionHandler(ExecutionHandler):
             float: The execution price after applying slippage.
         """
         # The slippage model now gets the market_event for more context
-        return self.slippage_model.calculate_slippage(order_event, market_price, market_event)
+        return self.slippage_model.calculate_slippage(
+            order_event, market_price, market_event
+        )
 
     def _calculate_commission(self, quantity: float, fill_price: float) -> float:
         """Calculates commission using the configured commission model.
@@ -349,5 +407,7 @@ class SimulatedExecutionHandler(ExecutionHandler):
             float: The calculated commission amount. Returns 0.0 if no model.
         """
         if self.commission_model:
-            return self.commission_model.calculate_commission(abs(quantity), fill_price) # Ensure positive quantity
+            return self.commission_model.calculate_commission(
+                abs(quantity), fill_price
+            )  # Ensure positive quantity
         return 0.0

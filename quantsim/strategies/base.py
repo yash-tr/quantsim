@@ -7,12 +7,14 @@ their response to market data, signals, and fill events.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Any, Union # Added Union for type hints
+from typing import List, Optional, Any, Union  # Added Union for type hints
 import datetime
 
 from quantsim.core.events import MarketEvent, SignalEvent, FillEvent, OrderEvent
 from quantsim.core.event_queue import EventQueue
+
 # from quantsim.data.base import DataHandler # For type hinting data_handler if strictly typed
+
 
 class Strategy(ABC):
     """Abstract base class for trading strategies.
@@ -32,12 +34,14 @@ class Strategy(ABC):
             indicator calculation or other analyses. Typically set in `__init__`.
     """
 
-    def __init__(self,
-                 event_queue: EventQueue,
-                 symbols: List[str],
-                 strategy_id: Optional[str] = None,
-                 data_handler: Optional[Any] = None, # Can be DataFrame or DataHandler
-                 **kwargs: Any):
+    def __init__(
+        self,
+        event_queue: EventQueue,
+        symbols: List[str],
+        strategy_id: Optional[str] = None,
+        data_handler: Optional[Any] = None,  # Can be DataFrame or DataHandler
+        **kwargs: Any,
+    ):
         """Initializes the Strategy.
 
         Args:
@@ -54,10 +58,11 @@ class Strategy(ABC):
         """
         self.event_queue: EventQueue = event_queue
         self.symbols: List[str] = symbols
-        self.strategy_id: str = strategy_id if strategy_id is not None else self.__class__.__name__
+        self.strategy_id: str = (
+            strategy_id if strategy_id is not None else self.__class__.__name__
+        )
         self.data_handler: Optional[Any] = data_handler
         # self._strategy_kwargs = kwargs # Optionally store unused kwargs if needed later
-
 
     @abstractmethod
     def on_market_data(self, event: MarketEvent) -> None:
@@ -117,12 +122,14 @@ class Strategy(ABC):
         """
         raise NotImplementedError("Should implement on_fill()")
 
-    def _generate_signal(self,
-                         symbol: str,
-                         direction: str,
-                         strength: float = 1.0,
-                         timestamp: Optional[datetime.datetime] = None,
-                         strategy_id_override: Optional[str] = None) -> None:
+    def _generate_signal(
+        self,
+        symbol: str,
+        direction: str,
+        strength: float = 1.0,
+        timestamp: Optional[datetime.datetime] = None,
+        strategy_id_override: Optional[str] = None,
+    ) -> None:
         """Helper method to create and enqueue a `SignalEvent`.
 
         Args:
@@ -134,24 +141,33 @@ class Strategy(ABC):
             strategy_id_override (Optional[str], optional): Overrides the strategy's default
                 ID for this specific signal. Defaults to None, using `self.strategy_id`.
         """
-        sig_id_to_use = strategy_id_override if strategy_id_override is not None else self.strategy_id
+        sig_id_to_use = (
+            strategy_id_override
+            if strategy_id_override is not None
+            else self.strategy_id
+        )
         signal = SignalEvent(
-            symbol=symbol, direction=direction, strength=strength,
-            timestamp=timestamp, strategy_id=sig_id_to_use
+            symbol=symbol,
+            direction=direction,
+            strength=strength,
+            timestamp=timestamp,
+            strategy_id=sig_id_to_use,
         )
         self.event_queue.put_event(signal)
 
-    def _generate_order(self,
-                        symbol: str,
-                        order_type: str,
-                        direction: str,
-                        quantity: float,
-                        timestamp: Optional[datetime.datetime] = None,
-                        order_id: Optional[str] = None,
-                        reference_price: Optional[float] = None,
-                        limit_price: Optional[float] = None,
-                        stop_price: Optional[float] = None,
-                        current_atr: Optional[float] = None) -> None:
+    def _generate_order(
+        self,
+        symbol: str,
+        order_type: str,
+        direction: str,
+        quantity: float,
+        timestamp: Optional[datetime.datetime] = None,
+        order_id: Optional[str] = None,
+        reference_price: Optional[float] = None,
+        limit_price: Optional[float] = None,
+        stop_price: Optional[float] = None,
+        current_atr: Optional[float] = None,
+    ) -> None:
         """Helper method to create and enqueue an `OrderEvent`.
 
         Strategies should use this method to generate orders. It populates all
@@ -176,8 +192,15 @@ class Strategy(ABC):
                 relevant for ATR-based slippage models. Defaults to None.
         """
         order = OrderEvent(
-            symbol=symbol, order_type=order_type, quantity=quantity, direction=direction,
-            timestamp=timestamp, order_id=order_id, reference_price=reference_price,
-            limit_price=limit_price, stop_price=stop_price, current_atr=current_atr
+            symbol=symbol,
+            order_type=order_type,
+            quantity=quantity,
+            direction=direction,
+            timestamp=timestamp,
+            order_id=order_id,
+            reference_price=reference_price,
+            limit_price=limit_price,
+            stop_price=stop_price,
+            current_atr=current_atr,
         )
         self.event_queue.put_event(order)

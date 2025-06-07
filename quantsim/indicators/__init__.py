@@ -17,8 +17,8 @@ from .sma import calculate_sma
 
 # Define what is publicly available when 'from quantsim.indicators import *' is used
 __all__ = [
-    'calculate_atr',
-    'calculate_sma',
+    "calculate_atr",
+    "calculate_sma",
 ]
 
 # Example for future expansion:

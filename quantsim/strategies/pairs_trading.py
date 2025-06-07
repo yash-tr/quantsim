@@ -10,6 +10,7 @@ from typing import List, Optional, Dict, Any
 
 try:
     from statsmodels.tsa.stattools import coint
+
     HAS_STATSMODELS = True
 except ImportError:
     HAS_STATSMODELS = False
@@ -19,22 +20,26 @@ from quantsim.core.events import MarketEvent, FillEvent, OrderEvent, SignalEvent
 from quantsim.core.event_queue import EventQueue
 from quantsim.strategies.base import Strategy
 
+
 class PairsTradingStrategy(Strategy):
     """
     A strategy that trades pairs of assets based on cointegration.
     It calculates the z-score of the spread and trades when it crosses
     predefined thresholds.
-    
+
     Note: This strategy requires the 'statsmodels' package for cointegration testing.
     Install with: pip install statsmodels
     """
-    def __init__(self,
-                 event_queue: EventQueue,
-                 symbols: List[str],
-                 lookback_period: int = 252,
-                 z_score_threshold: float = 2.0,
-                 order_quantity: float = 100.0,
-                 **kwargs: Any):
+
+    def __init__(
+        self,
+        event_queue: EventQueue,
+        symbols: List[str],
+        lookback_period: int = 252,
+        z_score_threshold: float = 2.0,
+        order_quantity: float = 100.0,
+        **kwargs: Any,
+    ):
         """
         Initializes the PairsTradingStrategy.
         Args:
@@ -46,13 +51,13 @@ class PairsTradingStrategy(Strategy):
         """
         if len(symbols) != 2:
             raise ValueError("PairsTradingStrategy requires exactly two symbols.")
-            
+
         if not HAS_STATSMODELS:
             raise ImportError(
                 "PairsTradingStrategy requires 'statsmodels' package for cointegration testing. "
                 "Install with: pip install statsmodels"
             )
-        
+
         super().__init__(event_queue, symbols, **kwargs)
         self.symbol1 = self.symbols[0]
         self.symbol2 = self.symbols[1]
@@ -77,14 +82,17 @@ class PairsTradingStrategy(Strategy):
         else:
             return
 
-        if len(self.prices1) > self.lookback_period and len(self.prices2) > self.lookback_period:
+        if (
+            len(self.prices1) > self.lookback_period
+            and len(self.prices2) > self.lookback_period
+        ):
             # Ensure we have data for both symbols at this timestamp
             if len(self.prices1) != len(self.prices2):
                 # Simple synchronization: wait for the next tick
                 return
 
-            prices1_series = pd.Series(self.prices1[-self.lookback_period:])
-            prices2_series = pd.Series(self.prices2[-self.lookback_period:])
+            prices1_series = pd.Series(self.prices1[-self.lookback_period :])
+            prices2_series = pd.Series(self.prices2[-self.lookback_period :])
 
             # Cointegration test
             score, pvalue, _ = coint(prices1_series, prices2_series)
@@ -98,22 +106,44 @@ class PairsTradingStrategy(Strategy):
 
             if z_score > self.z_score_threshold and not self.in_short:
                 # Short the spread (Sell symbol1, Buy symbol2)
-                self.event_queue.put_event(OrderEvent(self.symbol1, 'MKT', self.order_quantity, 'SELL'))
-                self.event_queue.put_event(OrderEvent(self.symbol2, 'MKT', self.order_quantity, 'BUY'))
+                self.event_queue.put_event(
+                    OrderEvent(self.symbol1, "MKT", self.order_quantity, "SELL")
+                )
+                self.event_queue.put_event(
+                    OrderEvent(self.symbol2, "MKT", self.order_quantity, "BUY")
+                )
                 self.in_short = True
                 self.in_long = False
 
             elif z_score < -self.z_score_threshold and not self.in_long:
                 # Long the spread (Buy symbol1, Sell symbol2)
-                self.event_queue.put_event(OrderEvent(self.symbol1, 'MKT', self.order_quantity, 'BUY'))
-                self.event_queue.put_event(OrderEvent(self.symbol2, 'MKT', self.order_quantity, 'SELL'))
+                self.event_queue.put_event(
+                    OrderEvent(self.symbol1, "MKT", self.order_quantity, "BUY")
+                )
+                self.event_queue.put_event(
+                    OrderEvent(self.symbol2, "MKT", self.order_quantity, "SELL")
+                )
                 self.in_long = True
                 self.in_short = False
 
             elif abs(z_score) < 0.5 and (self.in_long or self.in_short):
                 # Close position
-                self.event_queue.put_event(OrderEvent(self.symbol1, 'MKT', self.order_quantity, 'SELL' if self.in_long else 'BUY'))
-                self.event_queue.put_event(OrderEvent(self.symbol2, 'MKT', self.order_quantity, 'BUY' if self.in_long else 'SELL'))
+                self.event_queue.put_event(
+                    OrderEvent(
+                        self.symbol1,
+                        "MKT",
+                        self.order_quantity,
+                        "SELL" if self.in_long else "BUY",
+                    )
+                )
+                self.event_queue.put_event(
+                    OrderEvent(
+                        self.symbol2,
+                        "MKT",
+                        self.order_quantity,
+                        "BUY" if self.in_long else "SELL",
+                    )
+                )
                 self.in_long = False
                 self.in_short = False
 
@@ -122,4 +152,4 @@ class PairsTradingStrategy(Strategy):
         Handles fill events to update strategy state.
         """
         # Can be used to track position more accurately
-        pass 
+        pass

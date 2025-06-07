@@ -25,9 +25,9 @@ from .portfolio import Portfolio
 from .trade_log import TradeLog, Trade, DetailedFill
 
 __all__ = [
-    'Position',
-    'Portfolio',
-    'TradeLog',
-    'Trade',
-    'DetailedFill',
+    "Position",
+    "Portfolio",
+    "TradeLog",
+    "Trade",
+    "DetailedFill",
 ]

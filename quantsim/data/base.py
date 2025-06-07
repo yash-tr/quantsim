@@ -10,6 +10,7 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
 import pandas as pd
 
+
 class DataHandler(ABC):
     """Abstract base class for all data handlers.
 
@@ -20,6 +21,7 @@ class DataHandler(ABC):
     Attributes:
         symbols (List[str]): List of symbols this handler provides data for.
     """
+
     def __init__(self, symbols: List[str], **kwargs: Any):
         """Initializes the DataHandler.
 
@@ -30,7 +32,9 @@ class DataHandler(ABC):
         self.symbols = symbols
 
     @abstractmethod
-    def get_latest_bar(self, symbol: str) -> Optional[Tuple[pd.Timestamp, Dict[str, Any]]]:
+    def get_latest_bar(
+        self, symbol: str
+    ) -> Optional[Tuple[pd.Timestamp, Dict[str, Any]]]:
         """Returns the most recent bar for a symbol.
 
         Args:
@@ -44,7 +48,9 @@ class DataHandler(ABC):
         raise NotImplementedError("Should implement get_latest_bar()")
 
     @abstractmethod
-    def get_latest_bars(self, symbol: str, n: int = 1) -> Optional[List[Tuple[pd.Timestamp, Dict[str, Any]]]]:
+    def get_latest_bars(
+        self, symbol: str, n: int = 1
+    ) -> Optional[List[Tuple[pd.Timestamp, Dict[str, Any]]]]:
         """Returns the n most recent bars for a symbol.
 
         Args:
@@ -59,11 +65,13 @@ class DataHandler(ABC):
         raise NotImplementedError("Should implement get_latest_bars()")
 
     @abstractmethod
-    def get_historical_data(self,
-                          symbol: str,
-                          start_date: Optional[Union[str, pd.Timestamp]] = None,
-                          end_date: Optional[Union[str, pd.Timestamp]] = None,
-                          **kwargs: Any) -> pd.DataFrame:
+    def get_historical_data(
+        self,
+        symbol: str,
+        start_date: Optional[Union[str, pd.Timestamp]] = None,
+        end_date: Optional[Union[str, pd.Timestamp]] = None,
+        **kwargs: Any,
+    ) -> pd.DataFrame:
         """Returns historical data for a symbol.
 
         Args:
@@ -81,7 +89,9 @@ class DataHandler(ABC):
         raise NotImplementedError("Should implement get_historical_data()")
 
     @abstractmethod
-    def _prepare_data_iterator(self) -> Iterator[Tuple[pd.Timestamp, str, Dict[str, Any]]]:
+    def _prepare_data_iterator(
+        self,
+    ) -> Iterator[Tuple[pd.Timestamp, str, Dict[str, Any]]]:
         """Prepares an iterator for chronological data access.
 
         This method should be called before using the iterator protocol

@@ -5,14 +5,17 @@ implementations such as `PercentageSlippage` and `ATRSlippage`. These models
 are used by the `SimulatedExecutionHandler` to adjust fill prices from the
 reference market price, simulating market impact or adverse price movement.
 """
+
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 # Forward declaration for type hinting
-if 'quantsim.core.events' not in __import__('sys').modules:
+if "quantsim.core.events" not in __import__("sys").modules:
     from typing import TYPE_CHECKING
+
     if TYPE_CHECKING:
         from quantsim.core.events import OrderEvent, MarketEvent
+
 
 class SlippageModel(ABC):
     """Abstract base class for all slippage models.
@@ -33,12 +36,13 @@ class SlippageModel(ABC):
        Your implementation would then retrieve it via `atr_value = market_event.atr_value`.
     5. The method should return the calculated fill price (float) after applying slippage.
     """
+
     @abstractmethod
     def calculate_slippage(
         self,
-        order_event: 'OrderEvent',
+        order_event: "OrderEvent",
         market_price: float,
-        market_event: Optional['MarketEvent'] = None
+        market_event: Optional["MarketEvent"] = None,
     ) -> float:
         """Calculates the fill price after applying slippage.
 
@@ -57,6 +61,7 @@ class SlippageModel(ABC):
         """
         raise NotImplementedError("Should implement calculate_slippage()")
 
+
 class PercentageSlippage(SlippageModel):
     """Applies a fixed percentage-based slippage to the market price.
 
@@ -65,6 +70,7 @@ class PercentageSlippage(SlippageModel):
     Attributes:
         slippage_rate (float): The slippage rate (e.g., 0.001 for 0.1%). Must be >= 0 and < 1.
     """
+
     def __init__(self, slippage_rate: float = 0.001):
         """Initializes the PercentageSlippage model.
 
@@ -76,14 +82,16 @@ class PercentageSlippage(SlippageModel):
             ValueError: If `slippage_rate` is negative or greater than or equal to 1.
         """
         if not 0 <= slippage_rate < 1:
-            raise ValueError("Slippage rate must be between 0.0 (inclusive) and 1.0 (exclusive).")
+            raise ValueError(
+                "Slippage rate must be between 0.0 (inclusive) and 1.0 (exclusive)."
+            )
         self.slippage_rate: float = slippage_rate
 
     def calculate_slippage(
         self,
-        order_event: 'OrderEvent',
+        order_event: "OrderEvent",
         market_price: float,
-        market_event: Optional['MarketEvent'] = None
+        market_event: Optional["MarketEvent"] = None,
     ) -> float:
         """Calculates fill price with percentage slippage.
 
@@ -95,13 +103,14 @@ class PercentageSlippage(SlippageModel):
         Returns:
             float: Fill price after slippage.
         """
-        if order_event.direction == 'BUY':
+        if order_event.direction == "BUY":
             return market_price * (1 + self.slippage_rate)
-        elif order_event.direction == 'SELL':
+        elif order_event.direction == "SELL":
             return market_price * (1 - self.slippage_rate)
         # This case should ideally be prevented by validation of order_direction before calling.
         # print(f"Warning: PercentageSlippage received unrecognized order_direction '{order_event.direction}'. Applying no slippage.")
         return market_price
+
 
 class ATRSlippage(SlippageModel):
     """Applies slippage based on a multiple of the Average True Range (ATR).
@@ -112,6 +121,7 @@ class ATRSlippage(SlippageModel):
     Attributes:
         atr_multiplier (float): The multiplier for the ATR value. Must be non-negative.
     """
+
     def __init__(self, atr_multiplier: float = 0.5):
         """Initializes the ATRSlippage model.
 
@@ -127,9 +137,9 @@ class ATRSlippage(SlippageModel):
 
     def calculate_slippage(
         self,
-        order_event: 'OrderEvent',
+        order_event: "OrderEvent",
         market_price: float,
-        market_event: Optional['MarketEvent'] = None
+        market_event: Optional["MarketEvent"] = None,
     ) -> float:
         """Calculates fill price with ATR-based slippage.
 
@@ -145,9 +155,9 @@ class ATRSlippage(SlippageModel):
 
         if atr_value is not None and atr_value > 0:
             slippage_amount = atr_value * self.atr_multiplier
-            if order_event.direction == 'BUY':
+            if order_event.direction == "BUY":
                 return market_price + slippage_amount
-            elif order_event.direction == 'SELL':
+            elif order_event.direction == "SELL":
                 return market_price - slippage_amount
         # No ATR value provided or not positive, so no ATR-based slippage.
         # print("ATRSlippage: ATR value not available or not positive. Applying zero slippage for ATR component.")

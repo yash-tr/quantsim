@@ -1,6 +1,7 @@
 """
 Core simulation engine that orchestrates the backtesting process.
 """
+
 import time
 from typing import Optional, Any, TYPE_CHECKING, Dict, Callable
 
@@ -12,6 +13,7 @@ from quantsim.execution.execution_handler import ExecutionHandler
 
 if TYPE_CHECKING:
     from quantsim.portfolio.portfolio import Portfolio
+
 
 class SimulationEngine:
     """Orchestrates event-driven backtesting simulations.
@@ -29,12 +31,15 @@ class SimulationEngine:
         event_dispatch (Dict[str, Callable[[Event], None]]): Maps event types to handler methods.
         latest_market_event (Dict[str, MarketEvent]): Tracks the latest market event for each symbol.
     """
-    def __init__(self,
-                 event_queue: EventQueue,
-                 data_handler: DataHandler,
-                 strategy: Strategy,
-                 portfolio: "Portfolio",
-                 execution_handler: ExecutionHandler):
+
+    def __init__(
+        self,
+        event_queue: EventQueue,
+        data_handler: DataHandler,
+        strategy: Strategy,
+        portfolio: "Portfolio",
+        execution_handler: ExecutionHandler,
+    ):
         """Initializes the SimulationEngine.
 
         Args:
@@ -53,10 +58,10 @@ class SimulationEngine:
         self.latest_market_event: Dict[str, MarketEvent] = {}
 
         self.event_dispatch: Dict[str, Callable[[Any], None]] = {
-            'MARKET': self._handle_market_event,
-            'SIGNAL': self._handle_signal_event,
-            'ORDER': self._handle_order_event,
-            'FILL': self._handle_fill_event,
+            "MARKET": self._handle_market_event,
+            "SIGNAL": self._handle_signal_event,
+            "ORDER": self._handle_order_event,
+            "FILL": self._handle_fill_event,
         }
         print("SimulationEngine initialized.")
 
@@ -93,7 +98,7 @@ class SimulationEngine:
         Args:
             event (FillEvent): The fill event to process.
         """
-        self.strategy.on_fill(event) # Strategy might update its state based on fills
+        self.strategy.on_fill(event)  # Strategy might update its state based on fills
         self.portfolio.on_fill(event)
 
     def run(self) -> None:
@@ -125,19 +130,19 @@ class SimulationEngine:
             timestamp, symbol, ohlcv_data_dict = data_bar_info
 
             # Include bid/ask if available in the data source
-            bid_price = ohlcv_data_dict.get('Bid', ohlcv_data_dict['Close'])
-            ask_price = ohlcv_data_dict.get('Ask', ohlcv_data_dict['Close'])
+            bid_price = ohlcv_data_dict.get("Bid", ohlcv_data_dict["Close"])
+            ask_price = ohlcv_data_dict.get("Ask", ohlcv_data_dict["Close"])
 
             market_event = MarketEvent(
                 symbol=symbol,
                 timestamp=timestamp,
-                open_price=ohlcv_data_dict['Open'],
-                high_price=ohlcv_data_dict['High'],
-                low_price=ohlcv_data_dict['Low'],
-                close_price=ohlcv_data_dict['Close'],
-                volume=int(ohlcv_data_dict['Volume']),
+                open_price=ohlcv_data_dict["Open"],
+                high_price=ohlcv_data_dict["High"],
+                low_price=ohlcv_data_dict["Low"],
+                close_price=ohlcv_data_dict["Close"],
+                volume=int(ohlcv_data_dict["Volume"]),
                 bid_price=bid_price,
-                ask_price=ask_price
+                ask_price=ask_price,
             )
             self.event_queue.put_event(market_event)
 
@@ -154,7 +159,9 @@ class SimulationEngine:
                 if handler_method:
                     handler_method(event)
                 else:
-                    print(f"Warning: SimulationEngine - No handler registered for event type {event.type}")
+                    print(
+                        f"Warning: SimulationEngine - No handler registered for event type {event.type}"
+                    )
 
         print("\n--- Backtest Simulation Finished ---")
 

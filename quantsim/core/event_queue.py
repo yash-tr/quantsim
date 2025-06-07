@@ -6,7 +6,8 @@ trading simulation.
 """
 
 import queue
-from quantsim.core.events import Event # For type hinting
+from quantsim.core.events import Event  # For type hinting
+
 
 class EventQueue:
     """A simple wrapper around Python's `queue.Queue` for event handling.
@@ -19,6 +20,7 @@ class EventQueue:
         _queue (queue.Queue[Event]): The underlying standard library queue instance
             used to store and manage events.
     """
+
     def __init__(self):
         """Initializes the EventQueue with an empty `queue.Queue`."""
         self._queue: queue.Queue[Event] = queue.Queue()
@@ -44,7 +46,7 @@ class EventQueue:
             `block=False` and no item is available, but this wrapper currently
             uses the default blocking behavior.
         """
-        return self._queue.get() # Corrected
+        return self._queue.get()  # Corrected
 
     def empty(self) -> bool:
         """Checks if the event queue is currently empty.

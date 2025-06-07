@@ -40,37 +40,31 @@ from quantsim.indicators import calculate_sma, calculate_atr
 
 __all__ = [
     # Core
-    'EventQueue',
-    'SimulationEngine', 
-    'MarketEvent',
-    'OrderEvent',
-    'FillEvent',
-    'SignalEvent',
-    
+    "EventQueue",
+    "SimulationEngine",
+    "MarketEvent",
+    "OrderEvent",
+    "FillEvent",
+    "SignalEvent",
     # Data handlers
-    'YahooFinanceDataHandler',
-    'CSVDataManager', 
-    'SyntheticDataHandler',
-    
+    "YahooFinanceDataHandler",
+    "CSVDataManager",
+    "SyntheticDataHandler",
     # Strategies
-    'SMACrossoverStrategy',
-    'MomentumStrategy',
-    'MeanReversionStrategy',
-    
+    "SMACrossoverStrategy",
+    "MomentumStrategy",
+    "MeanReversionStrategy",
     # Portfolio
-    'Portfolio',
-    'Position',
-    
+    "Portfolio",
+    "Position",
     # Execution
-    'SimulatedExecutionHandler',
-    
+    "SimulatedExecutionHandler",
     # Indicators
-    'calculate_sma',
-    'calculate_atr',
-    
+    "calculate_sma",
+    "calculate_atr",
     # Metadata
-    '__version__',
-    '__author__',
-    '__email__',
-    '__license__',
-] 
+    "__version__",
+    "__author__",
+    "__email__",
+    "__license__",
+]

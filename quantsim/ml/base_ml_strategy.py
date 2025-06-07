@@ -12,20 +12,25 @@ import numpy as np
 # Optional ML dependencies
 try:
     import tensorflow as tf
+
     TENSORFLOW_AVAILABLE = True
 except ImportError:
     TENSORFLOW_AVAILABLE = False
+
 
 class BaseMLStrategy(Strategy):
     """
     Base class for strategies that use a machine learning model to generate signals.
     """
-    def __init__(self,
-                 event_queue: EventQueue,
-                 symbols: List[str],
-                 model_path: str,
-                 feature_lags: int = 5,
-                 **kwargs: Any):
+
+    def __init__(
+        self,
+        event_queue: EventQueue,
+        symbols: List[str],
+        model_path: str,
+        feature_lags: int = 5,
+        **kwargs: Any,
+    ):
         """
         Initializes the BaseMLStrategy.
         Args:
@@ -82,4 +87,4 @@ class BaseMLStrategy(Strategy):
         Generates a trading signal based on the model's prediction.
         """
         # This should be implemented by the specific ML strategy
-        raise NotImplementedError("Should implement generate_signal()") 
+        raise NotImplementedError("Should implement generate_signal()")

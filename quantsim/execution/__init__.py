@@ -22,23 +22,19 @@ trade execution to make backtest results more robust.
 from .execution_handler import (
     ExecutionHandler,
     SimulatedExecutionHandler,
-    CommissionModel, # Defined in execution_handler.py
+    CommissionModel,  # Defined in execution_handler.py
     FixedCommission,
-    PerShareCommission
+    PerShareCommission,
 )
-from .slippage import (
-    SlippageModel,
-    PercentageSlippage,
-    ATRSlippage
-)
+from .slippage import SlippageModel, PercentageSlippage, ATRSlippage
 
 __all__ = [
-    'ExecutionHandler',
-    'SimulatedExecutionHandler',
-    'CommissionModel',
-    'FixedCommission',
-    'PerShareCommission',
-    'SlippageModel',
-    'PercentageSlippage',
-    'ATRSlippage',
+    "ExecutionHandler",
+    "SimulatedExecutionHandler",
+    "CommissionModel",
+    "FixedCommission",
+    "PerShareCommission",
+    "SlippageModel",
+    "PercentageSlippage",
+    "ATRSlippage",
 ]

@@ -10,10 +10,10 @@ from .pairs_trading import PairsTradingStrategy
 from .simple_ml import SimpleMLStrategy
 
 __all__ = [
-    'Strategy',
-    'SMACrossoverStrategy',
-    'MomentumStrategy',
-    'MeanReversionStrategy',
-    'PairsTradingStrategy',
-    'SimpleMLStrategy'
+    "Strategy",
+    "SMACrossoverStrategy",
+    "MomentumStrategy",
+    "MeanReversionStrategy",
+    "PairsTradingStrategy",
+    "SimpleMLStrategy",
 ]

@@ -13,6 +13,7 @@ from datetime import datetime
 from typing import List, Dict, Optional, NamedTuple
 from quantsim.core.events import FillEvent
 
+
 class DetailedFill(NamedTuple):
     """Stores attributes of a single fill event for record-keeping.
 
@@ -26,6 +27,7 @@ class DetailedFill(NamedTuple):
         commission (float): Commission paid for this fill.
         exchange (Optional[str]): Exchange where fill occurred.
     """
+
     timestamp: datetime
     symbol: str
     order_id: Optional[str]
@@ -34,6 +36,7 @@ class DetailedFill(NamedTuple):
     fill_price: float
     commission: float
     exchange: Optional[str]
+
 
 @dataclass
 class Trade:
@@ -69,6 +72,7 @@ class Trade:
         entry_fills (List[DetailedFill]): List of `DetailedFill` objects for the entry leg.
         exit_fills (List[DetailedFill]): List of `DetailedFill` objects for the exit leg.
     """
+
     symbol: str
     entry_timestamp: datetime
     direction: str
@@ -93,12 +97,20 @@ class Trade:
     @property
     def avg_entry_price(self) -> float:
         """float: Average price of all entry fills for this trade."""
-        return self.value_total_entry / self.quantity_total_entry if self.quantity_total_entry > 1e-9 else 0.0
+        return (
+            self.value_total_entry / self.quantity_total_entry
+            if self.quantity_total_entry > 1e-9
+            else 0.0
+        )
 
     @property
     def avg_exit_price(self) -> float:
         """float: Average price of all exit fills for this trade."""
-        return self.value_total_exit / self.quantity_total_exit if self.quantity_total_exit > 1e-9 else 0.0
+        return (
+            self.value_total_exit / self.quantity_total_exit
+            if self.quantity_total_exit > 1e-9
+            else 0.0
+        )
 
     @property
     def duration_seconds(self) -> Optional[float]:
@@ -110,12 +122,17 @@ class Trade:
     @property
     def net_pnl(self) -> float:
         """float: Net profit or loss for this trade (realized_pnl less total commissions)."""
-        return self.realized_pnl - (self.total_entry_commission + self.total_exit_commission)
+        return self.realized_pnl - (
+            self.total_entry_commission + self.total_exit_commission
+        )
 
     def __repr__(self) -> str:
         state = "OPEN" if self.is_open else "CLOSED"
-        return (f"Trade(Sym:{self.symbol}, Dir:{self.direction}, St:{state}, QOpen:{self.quantity_open:.2f}, "
-                f"AvgEntry:{self.avg_entry_price:.2f}, AvgExit:{self.avg_exit_price:.2f}, NetPnL:{self.net_pnl:.2f})")
+        return (
+            f"Trade(Sym:{self.symbol}, Dir:{self.direction}, St:{state}, QOpen:{self.quantity_open:.2f}, "
+            f"AvgEntry:{self.avg_entry_price:.2f}, AvgExit:{self.avg_exit_price:.2f}, NetPnL:{self.net_pnl:.2f})"
+        )
+
 
 class TradeLog:
     """Processes fill events to reconstruct and log round-trip trades.
@@ -132,6 +149,7 @@ class TradeLog:
         open_trade_per_symbol (Dict[str, Trade]): A dictionary mapping symbols to their
             currently open `Trade` instance.
     """
+
     def __init__(self):
         """Initializes the TradeLog with empty lists for trades."""
         self.completed_trades: List[Trade] = []
@@ -147,10 +165,14 @@ class TradeLog:
             DetailedFill: A named tuple containing relevant details from the fill.
         """
         return DetailedFill(
-            timestamp=fill_event.timestamp, symbol=fill_event.symbol, order_id=fill_event.order_id,
-            direction=fill_event.direction, quantity=fill_event.quantity,
-            fill_price=fill_event.fill_price, commission=fill_event.commission,
-            exchange=fill_event.exchange
+            timestamp=fill_event.timestamp,
+            symbol=fill_event.symbol,
+            order_id=fill_event.order_id,
+            direction=fill_event.direction,
+            quantity=fill_event.quantity,
+            fill_price=fill_event.fill_price,
+            commission=fill_event.commission,
+            exchange=fill_event.exchange,
         )
 
     def process_fill(self, fill_event: FillEvent) -> None:
@@ -175,15 +197,20 @@ class TradeLog:
         if not open_trade:
             # No open trade for this symbol, this fill starts a new one
             new_trade = Trade(
-                symbol=symbol, entry_timestamp=fill_event.timestamp, direction=fill_event.direction,
-                quantity_total_entry=fill_qty, value_total_entry=(fill_px * fill_qty),
-                total_entry_commission=fill_comm, quantity_open=fill_qty, is_open=True
+                symbol=symbol,
+                entry_timestamp=fill_event.timestamp,
+                direction=fill_event.direction,
+                quantity_total_entry=fill_qty,
+                value_total_entry=(fill_px * fill_qty),
+                total_entry_commission=fill_comm,
+                quantity_open=fill_qty,
+                is_open=True,
             )
             new_trade.entry_fills.append(detailed_fill)
             self.open_trade_per_symbol[symbol] = new_trade
         elif open_trade.direction == fill_event.direction:
             # Fill is same direction: scaling into existing open trade
-            open_trade.value_total_entry += (fill_px * fill_qty)
+            open_trade.value_total_entry += fill_px * fill_qty
             open_trade.quantity_total_entry += fill_qty
             open_trade.total_entry_commission += fill_comm
             open_trade.quantity_open += fill_qty
@@ -193,45 +220,66 @@ class TradeLog:
             qty_closed_on_this_fill = min(fill_qty, open_trade.quantity_open)
 
             # Update exit accumulators for the open trade being closed/reduced
-            open_trade.value_total_exit += (fill_px * qty_closed_on_this_fill)
+            open_trade.value_total_exit += fill_px * qty_closed_on_this_fill
             open_trade.quantity_total_exit += qty_closed_on_this_fill
-            commission_for_this_close_portion = fill_comm * (qty_closed_on_this_fill / fill_qty) if fill_qty > 1e-9 else 0
+            commission_for_this_close_portion = (
+                fill_comm * (qty_closed_on_this_fill / fill_qty)
+                if fill_qty > 1e-9
+                else 0
+            )
             open_trade.total_exit_commission += commission_for_this_close_portion
 
             # Store the part of the fill that applies to closing this trade
             # Create a new DetailedFill for the exit_fills list with the exact quantity used for this closing part
-            closing_part_fill = detailed_fill._replace(quantity=qty_closed_on_this_fill, commission=commission_for_this_close_portion)
+            closing_part_fill = detailed_fill._replace(
+                quantity=qty_closed_on_this_fill,
+                commission=commission_for_this_close_portion,
+            )
             open_trade.exit_fills.append(closing_part_fill)
 
             # Calculate PnL for this closed portion
-            if open_trade.direction == 'LONG':
+            if open_trade.direction == "LONG":
                 pnl = (fill_px - open_trade.avg_entry_price) * qty_closed_on_this_fill
-            else: # SHORT
+            else:  # SHORT
                 pnl = (open_trade.avg_entry_price - fill_px) * qty_closed_on_this_fill
             open_trade.realized_pnl += pnl
 
             open_trade.quantity_open -= qty_closed_on_this_fill
-            open_trade.exit_timestamp = fill_event.timestamp # Update with latest exit activity
+            open_trade.exit_timestamp = (
+                fill_event.timestamp
+            )  # Update with latest exit activity
 
-            if open_trade.quantity_open <= 1e-9: # Trade instance fully closed
+            if open_trade.quantity_open <= 1e-9:  # Trade instance fully closed
                 open_trade.is_open = False
-                open_trade.quantity_open = 0.0 # Clean up small float residuals
+                open_trade.quantity_open = 0.0  # Clean up small float residuals
                 self.completed_trades.append(open_trade)
                 del self.open_trade_per_symbol[symbol]
 
             # Handle flip: if fill quantity was greater than what was needed to close
             qty_remaining_in_fill_for_flip = fill_qty - qty_closed_on_this_fill
             if qty_remaining_in_fill_for_flip > 1e-9:
-                commission_for_flipped_part = fill_comm * (qty_remaining_in_fill_for_flip / fill_qty) if fill_qty > 1e-9 else 0
+                commission_for_flipped_part = (
+                    fill_comm * (qty_remaining_in_fill_for_flip / fill_qty)
+                    if fill_qty > 1e-9
+                    else 0
+                )
                 flipped_trade = Trade(
-                    symbol=symbol, entry_timestamp=fill_event.timestamp, direction=fill_event.direction,
+                    symbol=symbol,
+                    entry_timestamp=fill_event.timestamp,
+                    direction=fill_event.direction,
                     quantity_total_entry=qty_remaining_in_fill_for_flip,
                     value_total_entry=(fill_px * qty_remaining_in_fill_for_flip),
                     total_entry_commission=commission_for_flipped_part,
-                    quantity_open=qty_remaining_in_fill_for_flip, is_open=True
+                    quantity_open=qty_remaining_in_fill_for_flip,
+                    is_open=True,
                 )
                 # The remaining part of the original detailed_fill opens the new trade
-                flipped_trade.entry_fills.append(detailed_fill._replace(quantity=qty_remaining_in_fill_for_flip, commission=commission_for_flipped_part))
+                flipped_trade.entry_fills.append(
+                    detailed_fill._replace(
+                        quantity=qty_remaining_in_fill_for_flip,
+                        commission=commission_for_flipped_part,
+                    )
+                )
                 self.open_trade_per_symbol[symbol] = flipped_trade
 
     def get_completed_trades(self) -> List[Trade]:
@@ -240,9 +288,9 @@ class TradeLog:
 
     def add_fill(self, fill_event: FillEvent) -> None:
         """Add a fill event to the trade log.
-        
+
         This is an alias for process_fill to maintain compatibility.
-        
+
         Args:
             fill_event: The fill event to process
         """
@@ -260,7 +308,7 @@ class TradeLog:
             include_open_trades (bool, optional): If True, currently open trades
                 will also be included in the export. Defaults to False.
         """
-        trades_to_export = list(self.completed_trades) # Start with a copy
+        trades_to_export = list(self.completed_trades)  # Start with a copy
         if include_open_trades:
             trades_to_export.extend(self.get_open_trades())
 
@@ -270,26 +318,41 @@ class TradeLog:
 
         print(f"TradeLog: Exporting {len(trades_to_export)} trades to {filepath}...")
         try:
-            with open(filepath, 'w', newline='') as csvfile:
+            with open(filepath, "w", newline="") as csvfile:
                 # Dynamically get field names from the Trade dataclass, excluding lists of fills
-                header = [f.name for f in fields(Trade) if f.name not in ['entry_fills', 'exit_fills']]
+                header = [
+                    f.name
+                    for f in fields(Trade)
+                    if f.name not in ["entry_fills", "exit_fills"]
+                ]
                 # Add property-based fields to header
-                header.extend(['avg_entry_price', 'avg_exit_price', 'net_pnl', 'duration_seconds'])
+                header.extend(
+                    ["avg_entry_price", "avg_exit_price", "net_pnl", "duration_seconds"]
+                )
 
-                writer = csv.DictWriter(csvfile, fieldnames=header, extrasaction='ignore')
+                writer = csv.DictWriter(
+                    csvfile, fieldnames=header, extrasaction="ignore"
+                )
                 writer.writeheader()
                 for trade in trades_to_export:
                     row_data = {}
                     # Populate direct attributes
-                    for f_name in header: # Iterate through desired header fields
-                        if hasattr(trade, f_name) and f_name not in ['avg_entry_price', 'avg_exit_price', 'net_pnl', 'duration_seconds']:
+                    for f_name in header:  # Iterate through desired header fields
+                        if hasattr(trade, f_name) and f_name not in [
+                            "avg_entry_price",
+                            "avg_exit_price",
+                            "net_pnl",
+                            "duration_seconds",
+                        ]:
                             row_data[f_name] = getattr(trade, f_name)
                     # Populate properties
-                    row_data['avg_entry_price'] = trade.avg_entry_price
-                    row_data['avg_exit_price'] = trade.avg_exit_price
-                    row_data['net_pnl'] = trade.net_pnl
+                    row_data["avg_entry_price"] = trade.avg_entry_price
+                    row_data["avg_exit_price"] = trade.avg_exit_price
+                    row_data["net_pnl"] = trade.net_pnl
                     duration = trade.duration_seconds
-                    row_data['duration_seconds'] = duration if duration is not None else '' # CSV friendly
+                    row_data["duration_seconds"] = (
+                        duration if duration is not None else ""
+                    )  # CSV friendly
 
                     writer.writerow(row_data)
             print(f"TradeLog: Successfully exported trades to {filepath}.")
