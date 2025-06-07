@@ -1,7 +1,7 @@
 # QuantSim Documentation
 
 <div align="center">
-    <img src="assets/quantsim-logo.png" alt="QuantSim Logo" width="200"/>
+    <img src="assets/favicon_icon.png" alt="QuantSim Logo" width="200"/>
     <h2>Professional Event-Driven Backtesting Framework</h2>
     <p><em>Build, test, and deploy quantitative trading strategies with confidence</em></p>
 </div>
