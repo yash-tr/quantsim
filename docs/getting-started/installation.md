@@ -149,5 +149,5 @@ pip install --upgrade quantsim
 Once installed, continue with:
 
 1. **[Quick Start Guide](quickstart.md)** - Build your first strategy
-2. **[Basic Concepts](concepts.md)** - Understand the framework
-3. **[Examples](../examples/sma-crossover.md)** - See real strategies in action 
+2. **[SMA Crossover Example](../examples/sma-crossover.md)** - See a real strategy in action
+3. **[Contributing](../development/contributing.md)** - Help improve QuantSim 

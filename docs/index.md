@@ -76,7 +76,7 @@ print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 
     Built-in strategies including SMA crossover, momentum, mean reversion, and pairs trading with ML integration support.
 
-    [:octicons-arrow-right-24: Learn about strategies](user-guide/strategies.md)
+    [:octicons-arrow-right-24: See SMA Example](examples/sma-crossover.md)
 
 -   :material-database:{ .lg .middle } **Multiple Data Sources**
 
@@ -84,7 +84,7 @@ print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 
     Support for Yahoo Finance, CSV files, and synthetic data generation with automatic symbol validation.
 
-    [:octicons-arrow-right-24: Explore data sources](user-guide/data-sources.md)
+    [:octicons-arrow-right-24: Installation Guide](getting-started/installation.md)
 
 -   :material-cog:{ .lg .middle } **Portfolio Management**
 
@@ -92,7 +92,7 @@ print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 
     Real-time P&L tracking, risk metrics, position management, and comprehensive trade logging.
 
-    [:octicons-arrow-right-24: Portfolio features](user-guide/portfolio.md)
+    [:octicons-arrow-right-24: Quick Start](getting-started/quickstart.md)
 
 -   :material-chart-box:{ .lg .middle } **Professional Reporting**
 
@@ -100,7 +100,7 @@ print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 
     Rich markdown reports with equity curves, performance metrics, and detailed analytics.
 
-    [:octicons-arrow-right-24: View reporting](user-guide/reporting.md)
+    [:octicons-arrow-right-24: View Examples](examples/sma-crossover.md)
 
 </div>
 
@@ -178,9 +178,8 @@ Ready to start building your trading strategies? Here are some suggested next st
 
 1. **[Install QuantSim](getting-started/installation.md)** - Get QuantSim installed on your system
 2. **[Quick Start Guide](getting-started/quickstart.md)** - Build your first strategy in minutes  
-3. **[Basic Concepts](getting-started/concepts.md)** - Understand the core concepts
-4. **[Examples](examples/sma-crossover.md)** - Explore real strategy examples
-5. **[API Reference](api/core.md)** - Dive deep into the API documentation
+3. **[SMA Crossover Example](examples/sma-crossover.md)** - Explore a real strategy example
+4. **[Contributing Guide](development/contributing.md)** - Help improve QuantSim
 
 ---
 

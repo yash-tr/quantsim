@@ -177,19 +177,13 @@ engine.run_live()
 Now that you've run your first strategy, explore more advanced features:
 
 ### 🚀 Immediate Next Steps
-1. **[Try Different Strategies](../examples/momentum.md)** - Explore momentum and mean reversion
-2. **[Add Multiple Assets](../user-guide/portfolio.md)** - Build a diversified portfolio  
-3. **[Custom Risk Management](../user-guide/risk-management.md)** - Add stop losses and position sizing
+1. **[Detailed SMA Example](../examples/sma-crossover.md)** - Deep dive into strategy implementation
+2. **[Contributing Guide](../development/contributing.md)** - Help improve QuantSim
+3. **[GitHub Repository](https://github.com/yash-tr/quantsim)** - Explore the source code
 
 ### 📚 Learn More
-4. **[Understanding Concepts](concepts.md)** - Core framework concepts
-5. **[Data Sources](../user-guide/data-sources.md)** - Work with different data types
-6. **[Performance Metrics](../user-guide/metrics.md)** - Understand the results
-
-### 🛠️ Advanced Topics
-7. **[Create Custom Strategies](../examples/custom-strategy.md)** - Build your own trading logic
-8. **[ML Integration](../examples/ml-integration.md)** - Add machine learning
-9. **[API Reference](../api/core.md)** - Dive deep into the code
+4. **[Installation Options](installation.md)** - Advanced installation and setup
+5. **[Community Support](../community/support.md)** - Get help and join discussions
 
 ## Common Patterns
 
@@ -237,4 +231,4 @@ engine = qs.SimulationEngine(
     - Use paper trading before live implementation
     - Monitor performance metrics beyond just returns
 
-Ready to build more sophisticated strategies? Check out our [examples](../examples/sma-crossover.md) section! 
+Ready to build more sophisticated strategies? Check out our [detailed SMA crossover example](../examples/sma-crossover.md)! 

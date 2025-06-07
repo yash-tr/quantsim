@@ -329,9 +329,9 @@ engine = qs.SimulationEngine(
 
 ## Next Steps
 
-Ready to explore more advanced strategies?
+Ready to explore more? Here are some suggestions:
 
-1. **[Momentum Strategy](momentum.md)** - Trend-following with momentum indicators
-2. **[Mean Reversion](mean-reversion.md)** - Counter-trend strategies  
-3. **[Pairs Trading](pairs-trading.md)** - Market-neutral strategies
-4. **[Custom Strategies](custom-strategy.md)** - Build your own trading logic 
+1. **[Quick Start Guide](../getting-started/quickstart.md)** - Learn more QuantSim basics
+2. **[Installation Guide](../getting-started/installation.md)** - Advanced installation options
+3. **[Contributing](../development/contributing.md)** - Help improve QuantSim
+4. **[GitHub Repository](https://github.com/yash-tr/quantsim)** - Explore the source code 
