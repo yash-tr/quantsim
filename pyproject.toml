@@ -41,11 +41,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yasht1004/quantsim"
-Repository = "https://github.com/yasht1004/quantsim"
-Documentation = "https://quantsim.readthedocs.io/"
-"Bug Tracker" = "https://github.com/yasht1004/quantsim/issues"
-Changelog = "https://github.com/yasht1004/quantsim/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/yash-tr/quantsim"
+Repository = "https://github.com/yash-tr/quantsim"
+Documentation = "https://yash-tr.github.io/quantsim/"
+"Bug Tracker" = "https://github.com/yash-tr/quantsim/issues"
+Changelog = "https://github.com/yash-tr/quantsim/blob/main/CHANGELOG.md"
 
 [project.scripts]
 quantsim = "quantsim.cli.main:main_cli_entry"
@@ -54,6 +54,10 @@ quantsim = "quantsim.cli.main:main_cli_entry"
 ml = [
     "scikit-learn>=1.0",
     "tensorflow>=2.8"
+]
+
+pairs = [
+    "statsmodels>=0.13.0"
 ]
 
 dev = [
@@ -68,9 +72,14 @@ dev = [
 ]
 
 docs = [
-    "sphinx",
-    "sphinx-rtd-theme",
-    "sphinx-autodoc-typehints"
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.2.0",
+    "mkdocs-git-committers-plugin-2>=1.2.0",
+    "mkdocs-minify-plugin>=0.7.0",
+    "pymdown-extensions>=10.0.0",
+    "pillow>=9.0.0",
+    "cairosvg>=2.5.0"
 ]
 
 # --- Tool Configurations ---

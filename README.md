@@ -1,10 +1,11 @@
 # 🚀 QuantSim: Professional Event-Driven Backtesting Framework
 
-[![Tests](https://github.com/yasht1004/quantsim/workflows/Test%20Suite/badge.svg)](https://github.com/yasht1004/quantsim/actions)
+[![Tests](https://github.com/yash-tr/quantsim/workflows/Test%20Suite/badge.svg)](https://github.com/yash-tr/quantsim/actions)
 [![PyPI](https://img.shields.io/pypi/v/quantsim.svg)](https://pypi.org/project/quantsim/)
 [![Python](https://img.shields.io/pypi/pyversions/quantsim.svg)](https://pypi.org/project/quantsim/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://yash-tr.github.io/quantsim/)
 
 **QuantSim** is a modern, event-driven backtesting framework for quantitative trading strategies. Built with Python 3.9+, it provides institutional-grade simulation capabilities with a focus on performance, accuracy, and extensibility.
 
@@ -30,11 +31,17 @@ pip install quantsim
 
 # With ML capabilities
 pip install quantsim[ml]
+
+# With pairs trading (requires statsmodels)
+pip install quantsim[pairs]
+
+# Full installation with all features
+pip install quantsim[ml,pairs]
 ```
 
 ### For Development
 ```bash
-git clone https://github.com/yasht1004/quantsim.git
+git clone https://github.com/yash-tr/quantsim.git
 cd quantsim
 pip install -e .[dev]
 ```
@@ -113,6 +120,7 @@ class MyStrategy(Strategy):
 - **SMA Crossover**: Moving average crossover with customizable windows
 - **Momentum**: Trend-following strategy with momentum indicators
 - **Mean Reversion**: Statistical arbitrage based on price deviations
+- **Pairs Trading**: Cointegration-based pairs trading (requires `statsmodels`)
 - **ML Strategies**: Integration with scikit-learn and TensorFlow
 
 ### **Data Sources**
@@ -219,7 +227,7 @@ pytest --cov=quantsim --cov-report=html
 ## 📚 **Documentation & Examples**
 
 ### **Available Resources**
-- 📖 **[API Documentation](https://quantsim.readthedocs.io/)** - Complete API reference
+- 📖 **[API Documentation](https://yash-tr.github.io/quantsim/)** - Complete API reference
 - 📓 **[Jupyter Notebooks](notebooks/)** - Interactive examples and tutorials
 - 🔧 **[Configuration Guide](PYPI_GITHUB_SETUP.md)** - Setup and configuration
 - 🤝 **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
@@ -307,7 +315,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ### **Development Setup**
 ```bash
-git clone https://github.com/yasht1004/quantsim.git
+git clone https://github.com/yash-tr/quantsim.git
 cd quantsim
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
@@ -334,8 +342,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 **Support & Community**
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/yasht1004/quantsim/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/yasht1004/quantsim/discussions)
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/yash-tr/quantsim/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/yash-tr/quantsim/discussions)
 - 📧 **Email**: tripathiyash1004@gmail.com
 - 💬 **Community**: Join our discussions for tips, strategies, and support
 
@@ -364,8 +372,3 @@ pip install quantsim
 ```
 
 ⭐ **Star us on GitHub if QuantSim helps your trading!** ⭐
-```
-
-The README has been updated.
-
-**Part 2: Create `CONTRIBUTING.md`**

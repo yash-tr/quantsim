@@ -1,0 +1,182 @@
+site_name: QuantSim
+site_description: Professional Event-Driven Backtesting Framework for Quantitative Trading
+site_author: Yash Tripathi
+site_url: https://yash-tr.github.io/quantsim/
+
+repo_name: yash-tr/quantsim
+repo_url: https://github.com/yash-tr/quantsim
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2024 Yash Tripathi
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  logo: assets/logo.png
+  icon:
+    logo: logo
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yash-tr/quantsim
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/quantsim/
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/yash-tripathi
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+  version:
+    provider: mike
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Basic Concepts: getting-started/concepts.md
+  - User Guide:
+    - Strategies: user-guide/strategies.md
+    - Data Sources: user-guide/data-sources.md
+    - Portfolio Management: user-guide/portfolio.md
+    - Risk Management: user-guide/risk-management.md
+    - Performance Metrics: user-guide/metrics.md
+    - Reporting: user-guide/reporting.md
+    - CLI Usage: user-guide/cli.md
+    - Configuration: user-guide/configuration.md
+  - Examples:
+    - SMA Crossover: examples/sma-crossover.md
+    - Momentum Strategy: examples/momentum.md
+    - Mean Reversion: examples/mean-reversion.md
+    - Pairs Trading: examples/pairs-trading.md
+    - Custom Strategy: examples/custom-strategy.md
+    - ML Integration: examples/ml-integration.md
+  - API Reference:
+    - Core: api/core.md
+    - Data: api/data.md
+    - Strategies: api/strategies.md
+    - Portfolio: api/portfolio.md
+    - Execution: api/execution.md
+    - Indicators: api/indicators.md
+    - Reports: api/reports.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Testing: development/testing.md
+    - Architecture: development/architecture.md
+    - Extending: development/extending.md
+  - Community:
+    - Changelog: community/changelog.md
+    - Roadmap: community/roadmap.md
+    - Support: community/support.md
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: yash-tr
+      repo: quantsim
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+  - git-committers:
+      repository: yash-tr/quantsim
+      branch: main
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - stylesheets/extra.css 

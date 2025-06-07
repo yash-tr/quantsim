@@ -20,7 +20,7 @@ git clone https://github.com/yourusername/quantsim.git
 cd quantsim
 
 # Set up upstream remote
-git remote add upstream https://github.com/yasht1004/quantsim.git
+git remote add upstream https://github.com/yash-tr/quantsim.git
 
 # Create virtual environment
 python -m venv venv
@@ -68,7 +68,7 @@ git push origin feature/amazing-new-feature
 
 Found a bug? Help us fix it!
 
-1. **🔍 Search existing issues** first: [GitHub Issues](https://github.com/yasht1004/quantsim/issues)
+1. **🔍 Search existing issues** first: [GitHub Issues](https://github.com/yash-tr/quantsim/issues)
 2. **📝 Use our bug report template** when creating a new issue
 3. **🔄 Provide reproduction steps** - we can't fix what we can't reproduce!
 4. **📋 Include environment details** (OS, Python version, QuantSim version)
@@ -86,7 +86,7 @@ Found a bug? Help us fix it!
 
 Have an idea to make QuantSim better?
 
-1. **💭 Check existing feature requests** in [GitHub Issues](https://github.com/yasht1004/quantsim/issues)
+1. **💭 Check existing feature requests** in [GitHub Issues](https://github.com/yash-tr/quantsim/issues)
 2. **📝 Use our feature request template**
 3. **🎯 Explain the use case** - what problem does this solve?
 4. **💻 Provide example usage** if possible
@@ -99,7 +99,7 @@ Have an idea to make QuantSim better?
 
 ```bash
 # Clone and setup
-git clone https://github.com/yasht1004/quantsim.git
+git clone https://github.com/yash-tr/quantsim.git
 cd quantsim
 
 # Install with all development dependencies
@@ -332,7 +332,7 @@ Contributors are recognized in several ways:
 
 Need help contributing?
 
-- **💬 GitHub Discussions**: [Start a discussion](https://github.com/yasht1004/quantsim/discussions)
+- **💬 GitHub Discussions**: [Start a discussion](https://github.com/yash-tr/quantsim/discussions)
 - **🐛 GitHub Issues**: Ask questions with the `question` label
 - **📧 Email**: tripathiyash1004@gmail.com
 
@@ -370,5 +370,3 @@ Not sure where to start? Look for:
 
 **Happy Coding!** 🚀
 ```
-
-**Part 3: Add `LICENSE` File**

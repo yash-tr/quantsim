@@ -1,0 +1,186 @@
+/* Custom styling for QuantSim documentation */
+
+/* Brand colors */
+:root {
+  --qs-primary: #3f51b5;
+  --qs-accent: #ff9800;
+  --qs-success: #4caf50;
+  --qs-warning: #ff9800;
+  --qs-error: #f44336;
+}
+
+/* Enhanced cards styling */
+.md-typeset .grid.cards > * {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.md-typeset .grid.cards > *:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Custom badge styling */
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.badge-success {
+  color: white;
+  background-color: var(--qs-success);
+}
+
+.badge-warning {
+  color: white;
+  background-color: var(--qs-warning);
+}
+
+.badge-primary {
+  color: white;
+  background-color: var(--qs-primary);
+}
+
+/* Enhanced code blocks */
+.md-typeset pre > code {
+  border-radius: 8px;
+}
+
+/* Performance metrics table styling */
+.performance-table {
+  margin: 1em 0;
+}
+
+.performance-table th {
+  background-color: var(--md-primary-fg-color--light);
+  color: white;
+  font-weight: 600;
+}
+
+.performance-table tr:nth-child(even) {
+  background-color: var(--md-default-bg-color--light);
+}
+
+/* Logo styling */
+.logo-container {
+  text-align: center;
+  margin: 2em 0;
+}
+
+.logo-container img {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Enhanced admonitions */
+.md-typeset .admonition.tip {
+  border-left-color: var(--qs-success);
+}
+
+.md-typeset .admonition.warning {
+  border-left-color: var(--qs-warning);
+}
+
+.md-typeset .admonition.danger {
+  border-left-color: var(--qs-error);
+}
+
+/* Custom button styling */
+.md-button {
+  border-radius: 6px;
+  padding: 0.625rem 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.md-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Code highlighting for specific languages */
+.language-python .k { color: #0066cc; }
+.language-python .s { color: #008800; }
+.language-python .c { color: #6c6c6c; }
+
+.language-bash .k { color: #cc0066; }
+.language-bash .s { color: #008800; }
+
+/* Table improvements */
+.md-typeset table:not([class]) {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--md-primary-fg-color);
+  color: white;
+  font-weight: 600;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  text-align: center;
+  margin: 2em 0;
+}
+
+/* Enhanced navigation */
+.md-nav__item--active > .md-nav__link {
+  font-weight: 600;
+  color: var(--qs-primary);
+}
+
+/* Custom footer */
+.md-footer {
+  background-color: var(--md-primary-fg-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 76.1875em) {
+  .md-typeset .grid.cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Performance charts container */
+.chart-container {
+  margin: 2em 0;
+  text-align: center;
+  padding: 1em;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  background-color: var(--md-default-bg-color--light);
+}
+
+/* Syntax highlighting improvements */
+.highlight .k { color: #0066cc; font-weight: bold; }
+.highlight .s { color: #008800; }
+.highlight .c { color: #6c6c6c; font-style: italic; }
+.highlight .n { color: #333333; }
+.highlight .nb { color: #0066cc; }
+
+/* Enhanced tabs */
+.md-typeset .tabbed-set {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading animation for async content */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+} 

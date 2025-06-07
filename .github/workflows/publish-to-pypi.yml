@@ -97,4 +97,4 @@ jobs:
         echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
         echo "- [PyPI Package](https://pypi.org/project/quantsim/)" >> $GITHUB_STEP_SUMMARY
         echo "- [Documentation](https://quantsim.readthedocs.io/)" >> $GITHUB_STEP_SUMMARY
-        echo "- [GitHub Repository](https://github.com/yasht1004/quantsim)" >> $GITHUB_STEP_SUMMARY 
+        echo "- [GitHub Repository](https://github.com/yash-tr/quantsim)" >> $GITHUB_STEP_SUMMARY 

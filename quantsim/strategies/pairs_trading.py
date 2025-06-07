@@ -7,7 +7,13 @@ and convergence of their price spread.
 import pandas as pd
 import numpy as np
 from typing import List, Optional, Dict, Any
-from statsmodels.tsa.stattools import coint
+
+try:
+    from statsmodels.tsa.stattools import coint
+    HAS_STATSMODELS = True
+except ImportError:
+    HAS_STATSMODELS = False
+    coint = None
 
 from quantsim.core.events import MarketEvent, FillEvent, OrderEvent, SignalEvent
 from quantsim.core.event_queue import EventQueue
@@ -18,6 +24,9 @@ class PairsTradingStrategy(Strategy):
     A strategy that trades pairs of assets based on cointegration.
     It calculates the z-score of the spread and trades when it crosses
     predefined thresholds.
+    
+    Note: This strategy requires the 'statsmodels' package for cointegration testing.
+    Install with: pip install statsmodels
     """
     def __init__(self,
                  event_queue: EventQueue,
@@ -37,6 +46,12 @@ class PairsTradingStrategy(Strategy):
         """
         if len(symbols) != 2:
             raise ValueError("PairsTradingStrategy requires exactly two symbols.")
+            
+        if not HAS_STATSMODELS:
+            raise ImportError(
+                "PairsTradingStrategy requires 'statsmodels' package for cointegration testing. "
+                "Install with: pip install statsmodels"
+            )
         
         super().__init__(event_queue, symbols, **kwargs)
         self.symbol1 = self.symbols[0]
