@@ -1,4 +1,4 @@
-# 🚀 Simquant: Professional Event-Driven Backtesting Framework
+# 🚀 simQuant: Professional Event-Driven Backtesting Framework
 
 [![Tests](https://github.com/yash-tr/quantsim/workflows/Test%20Suite/badge.svg)](https://github.com/yash-tr/quantsim/actions)
 [![PyPI](https://img.shields.io/pypi/v/quantsim.svg)](https://pypi.org/project/quantsim/)
