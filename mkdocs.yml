@@ -138,9 +138,6 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: true
       type: timeago
-  - git-committers:
-      repository: yash-tr/quantsim
-      branch: main
 
 extra_javascript:
   - javascripts/mathjax.js
