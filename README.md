@@ -288,7 +288,7 @@ risk_manager = RiskManager(
 
 ## 🌟 **Competitive Advantages**
 
-| Feature | QuantSim | Zipline | Backtrader | FreqTrade |
+| Feature | simQuant | Zipline | Backtrader | FreqTrade |
 |---------|----------|---------|------------|-----------|
 | **Modern Python** | ✅ 3.9+ | ❌ 3.6+ | ✅ 3.7+ | ✅ 3.8+ |
 | **Event-Driven** | ✅ | ✅ | ❌ | ✅ |
@@ -368,7 +368,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Ready to transform your trading strategies? Install QuantSim today and start building professional backtests in minutes!**
 
 ```bash
-pip install simquant
+pip install simQuant
 ```
 
-⭐ **Star us on GitHub if QuantSim helps your trading!** ⭐
+⭐ **Star us on GitHub if simQuant helps your trading!** ⭐
